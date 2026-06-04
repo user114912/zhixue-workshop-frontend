@@ -7,14 +7,12 @@
   <link rel="stylesheet" href="shared/styles.css" />
   <style>
     /* ---- 登录注册 / 用户区样式 ---- */
-      /* ---- 登录注册 / 用户区样式 ---- */
     .user-area {
       display: flex;
       align-items: center;
       gap: 8px;
     }
     
-
     .btn-login,
     .btn-register {
       min-height: 32px;
@@ -448,36 +446,146 @@
       color: var(--ink);
       text-align: right;
     }
+  /* ---- Landing Page ---- */
+  .landing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: var(--paper);
+    padding: 40px 28px;
+  }
+
+  .landing-hero {
+    text-align: center;
+    max-width: 680px;
+    animation: slide-up 0.5s ease;
+  }
+
+  .landing-title {
+    font-family: var(--font-serif);
+    font-size: clamp(48px, 8vw, 80px);
+    color: var(--ink);
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .landing-subtitle {
+    font-size: clamp(16px, 2.5vw, 20px);
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 40px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .landing-capabilities {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  .capability-item {
+    padding: 10px 20px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+    font-size: 14px;
+    color: var(--ink);
+    font-weight: 600;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .capability-item:hover {
+    border-color: var(--blue);
+    color: var(--blue);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(31, 95, 191, 0.1);
+  }
+
+  .landing-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .landing-actions .btn-login,
+  .landing-actions .btn-register {
+    min-height: 44px;
+    padding: 0 32px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .landing-actions .btn-register {
+    color: #fff;
+    background: var(--blue);
+    border: 1px solid var(--blue);
+  }
+
+  .landing-actions .btn-register:hover {
+    filter: brightness(1.1);
+  }
+
+  .landing-actions .btn-login {
+    color: var(--blue);
+    background: transparent;
+    border: 1px solid var(--blue);
+  }
+
+  .landing-actions .btn-login:hover {
+    color: #fff;
+    background: var(--blue);
+  }
   </style>
 </head>
 <body>
-  <div class="app">
+
+  <!-- 未登录演示界面 -->
+  <div class="landing" id="landingPage">
+    <div class="landing-hero">
+      <h1 class="landing-title">OpenHLG</h1>
+      <p class="landing-subtitle">面向高校课程的个性化学习资源生成与多智能体学习系统</p>
+      <div class="landing-capabilities">
+        <div class="capability-item">💬 对话式学习画像</div>
+        <div class="capability-item">🤖 多智能体资源生成</div>
+        <div class="capability-item">🗺️ 个性化学习路径</div>
+        <div class="capability-item">🎓 智能辅导</div>
+        <div class="capability-item">📊 学习效果评估</div>
+      </div>
+      <div class="landing-actions">
+        <button class="btn-register" id="btnLandingRegister">注册</button>
+        <button class="btn-login" id="btnLandingLogin">登录</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="app" id="appShell" style="display:none">
 
     <!-- 左侧导航 -->
     <aside class="rail" id="mainNav" aria-label="主导航">
       <div class="rail-logo" title="智学工坊">智</div>
 
-      <button class="rail-btn active" data-route="chat" title="学习诊断">&#x2318;</button>
-      <button class="rail-btn" data-route="profile" title="学生画像">&#x263A;</button>
-      <button class="rail-btn" data-route="resources" title="学习资源">&#x25A1;</button>
-      <button class="rail-btn" data-route="tutor" title="智能辅导">&#x1F4AC;</button>
-      <button class="rail-btn" data-route="quiz" title="练习测评">&#x270E;</button>
-      <button class="rail-btn" data-route="path" title="学习路径">&#x21E2;</button>
-      <button class="rail-btn" data-route="report" title="学习报告">&#x1F4CA;</button>
+	      <button class="rail-btn active" data-route="chat" title="学习诊断">&#x2318;</button>
+	      <button class="rail-btn" data-route="profile" title="学生画像">&#x263A;</button>
+	      <button class="rail-btn" data-route="resources" title="学习资源">&#x25A1;</button>
+	      <button class="rail-btn" data-route="agents" title="Agent 协作">&#x25CE;</button>
+	      <button class="rail-btn" data-route="path" title="学习路径">&#x21E2;</button>
+	      <button class="rail-btn" data-route="tutor" title="智能辅导">&#x1F4AC;</button>
+	      <button class="rail-btn" data-route="quiz" title="练习测评">&#x270E;</button>
+	      <button class="rail-btn" data-route="report" title="学习报告">&#x1F4CA;</button>
+	      <button class="rail-btn" data-route="knowledge" title="课程知识库">&#x25C7;</button>
+	      <button class="rail-btn" data-route="classroom" title="学情分析">&#x263C;</button>
+	      <button class="rail-btn" data-route="advice" title="教学建议">&#x1F4DD;</button>
 
-      <div class="rail-divider"></div>
+	      <div class="rail-divider"></div>
 
-      <button class="rail-btn" data-route="agents" title="Agent 协作">&#x25CE;</button>
-      <button class="rail-btn" data-route="knowledge" title="课程知识库">&#x25C7;</button>
-      <button class="rail-btn" data-route="review" title="AI 资源审核">&#x2713;</button>
-      <button class="rail-btn" data-route="classroom" title="班级学情">&#x263C;</button>
-      <button class="rail-btn" data-route="advice" title="教学建议">&#x1F4DD;</button>
-
-      <div class="rail-divider"></div>
-
-      <button class="rail-btn" data-route="tasks" title="生成任务">&#x2699;</button>
-      <button class="rail-btn" data-route="safety" title="安全审核">&#x26E8;</button>
-      <button class="rail-btn" data-route="settings" title="模型配置">&#x2691;</button>
+	      <button class="rail-btn" data-route="settings" title="设置">&#x2691;</button>
 
       <div class="rail-bottom"></div>
     </aside>
@@ -487,7 +595,7 @@
       <!-- 顶部栏 -->
       <header class="topbar">
         <div class="crumb">
-          <span id="roleLabel">访客体验</span>
+          <span id="roleLabel">智学空间</span>
           <span class="crumb-sep">/</span>
           <strong id="pageMeta">学习诊断</strong>
         </div>
@@ -511,8 +619,7 @@
       <!-- 学习诊断 -->
       <section class="page active" id="section-chat">
         <div class="hero-chat">
-          <p class="soft-label">智学工坊 · Python 程序设计</p>
-          <h1>今天想解决哪个学习卡点？</h1>
+          <h1>你好，我是 OpenHLG，今天你想学点什么呢？</h1>
           <p class="hero-copy">先用一句话描述你的基础、目标和困难，系统会生成学生画像，再逐步进入资源、练习和路径空间。</p>
 
           <div class="composer">
@@ -666,16 +773,6 @@
       </section>
 
       <!-- 资源审核 -->
-      <section class="page" id="section-review">
-        <div class="space-shell">
-          <div class="space-heading">
-            <p class="soft-label">Review</p>
-            <h1>AI 资源审核</h1>
-            <p>审核 AI 生成的讲义、题目和代码，确保质量后再发布给学生。</p>
-          </div>
-          <div class="review-list" id="reviewList"></div>
-        </div>
-      </section>
 
       <!-- 班级学情 -->
       <section class="page" id="section-classroom">
@@ -745,41 +842,29 @@
       </section>
 
       <!-- 生成任务队列（系统） -->
-      <section class="page" id="section-tasks">
-        <div class="space-shell">
-          <div class="space-heading">
-            <p class="soft-label">Task Queue</p>
-            <h1>生成任务队列</h1>
-            <p>跟踪 PPT、视频、题库等耗时生成任务的进度，避免长时间白屏等待。</p>
-          </div>
-          <div class="task-list" id="taskList"></div>
-        </div>
-      </section>
 
       <!-- 安全与防幻觉（系统） -->
-      <section class="page" id="section-safety">
-        <div class="space-shell">
-          <div class="space-heading">
-            <p class="soft-label">Safety</p>
-            <h1>安全与防幻觉</h1>
-            <p>展示生成内容的来源引用、事实检查和敏感内容审核记录。</p>
-          </div>
-          <div class="safety-list" id="safetyList"></div>
-        </div>
-      </section>
 
-      <!-- 模型与工具配置（系统） -->
+<!-- 设置 -->
       <section class="page" id="section-settings">
         <div class="space-shell">
           <div class="space-heading">
             <p class="soft-label">Settings</p>
-            <h1>模型与工具配置</h1>
-            <p>展示系统使用的大模型、框架、向量库和开源项目引用。</p>
+<h1>设置</h1>
+<p>系统配置信息、技术说明与安全机制。</p>
+          </div>
+          <div class="dashboard-section" style="margin-top:24px">
+            <h2>当前课程</h2>
+            <div id="settingsCourse"></div>
           </div>
           <div class="settings-grid" id="settingsModels"></div>
           <div class="dashboard-section" style="margin-top:24px">
             <h2>开源项目引用</h2>
             <div id="settingsRefs"></div>
+          <div class="dashboard-section" style="margin-top:24px">
+            <h2>安全与防幻觉机制</h2>
+            <div id="settingsSafety"></div>
+          </div>
           </div>
         </div>
       </section>
@@ -836,6 +921,8 @@
     // ---- 登录/退出逻辑 ---- //
 
     function doLogin(name) {
+      document.getElementById('landingPage').style.display = 'none';
+      document.getElementById('appShell').style.display = '';
       S.currentUser = { name: name, role: 'workspace' };
       document.getElementById('loggedOut').style.display = 'none';
       document.getElementById('loggedIn').style.display = 'flex';
@@ -846,11 +933,13 @@
     }
 
     function doLogout() {
+      document.getElementById('landingPage').style.display = '';
+      document.getElementById('appShell').style.display = 'none';
       S.currentUser = null;
       document.getElementById('loggedOut').style.display = 'flex';
       document.getElementById('loggedIn').style.display = 'none';
-      ZhixueApp.setRole('default');
-      document.getElementById('roleLabel').textContent = S.roleLabels.default;
+      ZhixueApp.setRole('workspace');
+      document.getElementById('roleLabel').textContent = S.roleLabels.workspace;
       S.updatePreviewNotice();
     }
 
@@ -872,7 +961,7 @@
 
     var cfg = ZhixueRouteConfig;
     ZhixueApp.init({
-      defaultRole: 'default',
+      defaultRole: 'workspace',
       containerId: 'mainContent',
       metaId: 'pageMeta',
       navParentId: 'mainNav',
@@ -889,6 +978,8 @@
     // 登录/注册弹窗
     document.getElementById('btnLogin').addEventListener('click', function () { openEntryModal('login'); });
     document.getElementById('btnRegister').addEventListener('click', function () { openEntryModal('register'); });
+    document.getElementById('btnLandingLogin').addEventListener('click', function () { openEntryModal('login'); });
+    document.getElementById('btnLandingRegister').addEventListener('click', function () { openEntryModal('register'); });
     document.getElementById('closeEntryModal').addEventListener('click', function () { S.hideModal('entryModal'); });
     document.getElementById('cancelEntry').addEventListener('click', function () { S.hideModal('entryModal'); });
     document.getElementById('entryModal').addEventListener('click', function (e) { if (e.target === this) S.hideModal('entryModal'); });

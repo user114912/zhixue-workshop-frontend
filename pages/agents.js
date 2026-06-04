@@ -69,6 +69,13 @@
 
   /* ---- 模型与工具配置 ---- */
   function renderSettings() {
+    // 当前课程
+    var course = document.getElementById('settingsCourse');
+    if (course) {
+      course.innerHTML = '<p style="font-size:15px"><strong>当前课程：</strong>' + (ZHIXUE_MOCK.settings.courseName || 'Python 程序设计') + '</p>' +
+        '<p style="font-size:13px;color:var(--muted)">系统围绕该课程构建知识库、生成个性化资源并追踪学习进度。</p>';
+    }
+
     var models = document.getElementById('settingsModels');
     if (models) {
       models.innerHTML = ZHIXUE_MOCK.settings.models.map(function (m) {
@@ -83,6 +90,15 @@
         }).join('') +
       '</tbody></table>' +
       '<p style="margin-top:12px;font-size:12px;color:var(--muted)">最后更新：' + ZHIXUE_MOCK.settings.lastUpdated.split('T')[0] + '</p>';
+    }
+
+    // 安全与防幻觉机制
+    var safety = document.getElementById('settingsSafety');
+    if (safety && ZHIXUE_MOCK.settings.safetyMechanism) {
+      var sm = ZHIXUE_MOCK.settings.safetyMechanism;
+      safety.innerHTML = '<ul style="line-height:2">' +
+        sm.items.map(function (item) { return '<li>' + item + '</li>'; }).join('') +
+      '</ul>';
     }
   }
 

@@ -27,16 +27,16 @@
 
     roleLabels: {
       default: '访客体验',
-      workspace: '智学工坊空间'
+      workspace: '智学空间'
     },
 
-    /** 访客模式预览提示 */
+    /** 预览提示已禁用（不再使用访客体验模式） */
     updatePreviewNotice: function () {
-      var isGuest = ZhixueApp.getRole() === 'default';
       var notice = document.getElementById('previewNotice');
-      if (notice) notice.style.display = isGuest ? '' : 'none';
+      if (notice) notice.style.display = 'none';
+
       var agentsNotice = document.getElementById('agentsPreviewNotice');
-      if (agentsNotice) agentsNotice.style.display = isGuest ? '' : 'none';
+      if (agentsNotice) agentsNotice.style.display = 'none';
     },
 
     /** 弹窗辅助 */

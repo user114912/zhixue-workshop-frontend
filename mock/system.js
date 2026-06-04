@@ -122,6 +122,7 @@
 
   /* ---- 模型与工具配置 ---- */
   ZHIXUE_MOCK.settings = {
+    courseName: 'Python 程序设计',
     models: [
       { name: '核心大模型', value: '讯飞星火 4.0 / GLM-4.7', status: '已连接' },
       { name: '多智能体框架', value: 'LangGraph', status: '已配置' },
@@ -137,6 +138,15 @@
       { name: 'BGE-M3', url: 'https://huggingface.co/BAAI/bge-m3', license: 'MIT', usage: '文档 Embedding' },
       { name: 'SeeDance', url: 'https://github.com/...', license: 'Apache-2.0', usage: '多模态视频生成参考' }
     ],
-    lastUpdated: '2026-06-03T00:00:00Z'
+    lastUpdated: '2026-06-03T00:00:00Z',
+    safetyMechanism: {
+      title: '安全与防幻觉机制',
+      items: [
+        '生成内容来源追溯：所有 AI 生成资源均标注知识库引用来源',
+        '知识库事实校验：基于课程知识库对生成内容进行一致性检查',
+        '敏感内容自动审核：检测并过滤不当内容，标记高风险项',
+        '教师二次确认流程：高风险或未通过审核内容需教师确认后发布'
+      ]
+    }
   };
 })();

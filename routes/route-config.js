@@ -19,11 +19,11 @@
     dashboard:  { id: 'dashboard',  label: '教师看板',     onEnter: P.renderDashboard },
     knowledge:  { id: 'knowledge',  label: '课程知识库',   onEnter: P.renderKnowledge },
     review:     { id: 'review',     label: '资源审核',     onEnter: P.renderReview },
-    classroom:  { id: 'classroom',  label: '班级学情',     onEnter: P.renderClassroom },
+    classroom:  { id: 'classroom',  label: '学情分析',     onEnter: P.renderClassroom },
     advice:     { id: 'advice',     label: '教学建议',     onEnter: P.renderAdvice },
     tasks:      { id: 'tasks',      label: '生成任务',     onEnter: P.renderTasks },
     safety:     { id: 'safety',     label: '安全审核',     onEnter: P.renderSafety },
-    settings:   { id: 'settings',   label: '模型配置',     onEnter: P.renderSettings }
+    settings:   { id: 'settings',   label: '设置',     onEnter: P.renderSettings }
   };
 
   window.ZhixueRouteConfig = {
@@ -35,23 +35,19 @@
         sections: [sections.chat, sections.resources, sections.agents]
       },
       workspace: {
-        label: '智学工坊空间',
+        label: '智学空间',
         sections: [
           sections.chat,
           sections.profile,
           sections.resources,
+          sections.agents,
+          sections.path,
           sections.tutor,
           sections.quiz,
-          sections.path,
           sections.report,
-          sections.agents,
-          sections.dashboard,
           sections.knowledge,
-          sections.review,
           sections.classroom,
           sections.advice,
-          sections.tasks,
-          sections.safety,
           sections.settings
         ]
       }
