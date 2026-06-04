@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>录屏脚本 · 智学工坊</title>
+  <link rel="stylesheet" href="shared/styles.css" />
+</head>
+<body>
+
+<div class="demo-shell">
+
+  <!-- 顶部 -->
+  <header class="demo-header">
+    <div>
+      <h1>录屏脚本 · 智学工坊</h1>
+      <p class="soft-label" style="margin:0">竞赛 7 分钟演示视频录制辅助，模拟完整学习闭环</p>
+    </div>
+    <a href="index.html" class="back-link">← 返回首页</a>
+  </header>
+
+  <!-- 步骤指示器 -->
+  <nav class="step-indicator" id="stepIndicator">
+    <!-- JS 动态生成 -->
+  </nav>
+
+  <!-- 演示内容区 -->
+  <main class="demo-content" id="demoContent">
+    <!-- JS 动态渲染 -->
+  </main>
+
+  <!-- 控制栏 -->
+  <footer class="demo-controls">
+    <button class="demo-btn-prev" id="prevBtn" disabled>◀ 上一步</button>
+    <span class="step-counter" id="stepCounter">Step 1 / 7</span>
+    <button class="demo-btn-auto" id="autoPlayBtn">▶ 自动演示</button>
+    <div class="demo-speed">
+      <span>速度</span>
+      <select id="speedSelect">
+        <option value="2000">快 (2s)</option>
+        <option value="3500" selected>中 (3.5s)</option>
+        <option value="5000">慢 (5s)</option>
+      </select>
+    </div>
+    <button class="demo-btn-next" id="nextBtn">下一步 ▶</button>
+  </footer>
+
+</div>
+
+<!-- 脚本 -->
+<script src="mock/index.js"></script>
+<script src="mock/profile.js"></script>
+<script src="mock/resources.js"></script>
+<script src="mock/quiz.js"></script>
+<script src="mock/path.js"></script>
+<script src="mock/knowledge.js"></script>
+<script src="mock/agents.js"></script>
+<script src="mock/teacher.js"></script>
+
+<script>
+/* ============================================================
+   智学工坊 — 一键演示脚本
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var demoSteps = [
+    {
+      id: 'input',
+      title: '学生输入',
+      subtitle: '学生描述自己的学习困难',
+      icon: '✎',
+      render: renderStepInput
+    },
+    {
+      id: 'profile',
+      title: '学生画像',
+      subtitle: '多 Agent 协同诊断，生成学生画像',
+      icon: '◉',
+      render: renderStepProfile
+    },
+    {
+      id: 'agents',
+      title: 'Agent 协作',
+      subtitle: '5 个 Agent 各司其职，协同工作',
+      icon: '◎',
+      render: renderStepAgents
+    },
+    {
+      id: 'resources',
+      title: '个性化资源',
+      subtitle: 'AI 生成讲义、题目、代码、导图',
+      icon: '▣',
+      render: renderStepResources
+    },
+    {
+      id: 'quiz',
+      title: '练习测评',
+      subtitle: '学生答题，系统自动分析与纠错',
+      icon: '✓',
+      render: renderStepQuiz
+    },
+    {
+      id: 'path',
+      title: '学习路径',
+      subtitle: '根据错因推荐下一步学习任务',
+      icon: '→',
+      render: renderStepPath
+    },
+    {
+      id: 'teacher',
+      title: '教师看板',
+      subtitle: '教师实时掌握全班学习状况',
+      icon: '▦',
+      render: renderStepTeacher
+    }
+  ];
+
+  var currentStep = 0;
+  var autoPlayTimer = null;
+  var autoPlaying = false;
+
+  // ---- 步骤渲染函数 ---- //
+
+  function renderStepInput() {
+    return '\n    <div class="center-stage narrow text-center" style="max-width:700px">\n      <h1 style="font-size:clamp(28px,4vw,44px)">今天想解决哪个学习卡点？</h1>\n      <p style="font-size:17px">学生只需用一句话描述自己的基础和困难</p>\n      <div class="composer" style="margin-top:24px">\n        <textarea rows="4" style="font-size:17px">我 Python 基础一般，循环和函数不太会，想准备期末考试。</textarea>\n        <div class="composer-footer">\n          <div class="composer-tools">\n            <span class="model-pill">glm-4.7-flash</span>\n          </div>\n          <div class="composer-tools">\n            <button class="send-btn" style="background:var(--blue)">↑</button>\n          </div>\n        </div>\n      </div>\n      <p style="margin-top:16px;font-size:14px">系统收到输入后，<strong>学情诊断 Agent</strong> 开始分析...</p>\n    </div>';
+  }
+
+  function renderStepProfile() {
+    var cards = ZHIXUE_MOCK.profileCards;
+    return '\n    <div class="center-stage" style="max-width:900px">\n      <h1 style="font-size:clamp(28px,4vw,40px);text-align:center">学生画像</h1>\n      <p style="text-align:center;font-size:16px">多 Agent 协同分析，自动识别薄弱点和学习偏好</p>\n      <div class="profile-grid" style="margin-top:24px">\n        ' + cards.map(function (pair, i) {
+      return '<div class="profile-card slide-up" style="animation-delay:' + (i * 0.15) + 's"><span>' + pair[0] + '</span><strong>' + pair[1] + '</strong></div>';
+    }).join('\n        ') + '\n      </div>\n      <p style="text-align:center;margin-top:20px;font-size:14px">画像已生成 → 下一步交给 <strong>知识检索 Agent</strong> 和 <strong>讲义生成 Agent</strong></p>\n    </div>';
+  }
+
+  function renderStepAgents() {
+    var run = ZHIXUE_MOCK.agentRun;
+    return '\n    <div class="center-stage" style="max-width:900px">\n      <h1 style="font-size:clamp(28px,4vw,40px);text-align:center">多 Agent 协同工作</h1>\n      <p style="text-align:center;font-size:16px">5 个 Agent 流水线协作，每个 Agent 有明确的输入和输出</p>\n      <div class="agent-flow" style="margin-top:24px">\n        ' + run.agents.map(function (a, i) {
+      var orig = ZHIXUE_MOCK.agents.find(function (x) { return x.id === a.id; });
+      var statusClass = a.status === 'done' ? 'done' : a.status === 'running' ? 'running' : 'ready';
+      var statusText = a.status === 'done' ? 'Done' : a.status === 'running' ? 'Running...' : 'Ready';
+      return '\n        <div class="agent-card slide-up" style="animation-delay:' + (i * 0.2) + 's">\n          <div class="agent-avatar">' + (orig ? orig.avatar : '?') + '</div>\n          <div>\n            <h3>' + (orig ? orig.name : a.id) + '</h3>\n            <p style="font-size:14px">' + (orig ? orig.description : '') + '</p>\n          </div>\n          <span class="status ' + statusClass + '">' + statusText + '</span>\n        </div>';
+    }).join('\n        ') + '\n      </div>\n      <p style="text-align:center;margin-top:20px;font-size:14px">系统不是单一 Prompt，而是 <strong>5 个专业 Agent 分工协作</strong></p>\n    </div>';
+  }
+
+  function renderStepResources() {
+    var resources = ZHIXUE_MOCK.resources;
+    return '\n    <div class="space-shell" style="max-width:1000px;padding-top:40px">\n      <h1 style="font-size:clamp(28px,4vw,40px);text-align:center">个性化学习资源</h1>\n      <p style="text-align:center;font-size:16px">每类资源独立展示：讲义、题目、代码、导图、拓展阅读</p>\n      <div class="resource-layout" style="margin-top:24px">\n        <aside class="resource-list">\n          ' + resources.map(function (r, i) {
+      return '<div class="resource-item' + (i === 0 ? ' active' : '') + ' slide-up" style="animation-delay:' + (i * 0.1) + 's"><strong>' + r.title + '</strong><span>' + r.description + '</span></div>';
+    }).join('\n          ') + '\n        </aside>\n        <article class="reader-card slide-up" style="animation-delay:0.3s">\n          ' + resources[0].body + '\n        </article>\n      </div>\n      <p style="text-align:center;margin-top:20px;font-size:14px">资源匹配学生薄弱点，每份资源标注来源知识点和难度</p>\n    </div>';
+  }
+
+  function renderStepQuiz() {
+    var q = ZHIXUE_MOCK.quiz;
+    return '\n    <div class="center-stage narrow" style="max-width:700px;padding-top:40px">\n      <h1 style="font-size:clamp(28px,4vw,40px);text-align:center">练习测评</h1>\n      <p style="text-align:center;font-size:16px">学生完成练习，系统自动评分并进行错因分析</p>\n      <div class="quiz-card slide-up">\n        <h2>' + q.title + '</h2>\n        <p>' + q.description + '</p>\n        <pre class="code-block"><code>' + q.code + '</code></pre>\n        <div class="option-list">\n          ' + q.options.map(function (opt) {
+      var checked = opt.key === q.correctAnswer ? ' checked' : '';
+      return '<label class="' + (opt.key === q.correctAnswer ? 'selected' : '') + '"><input type="radio" name="quiz"' + checked + '> ' + opt.key + '. ' + opt.text + '</label>';
+    }).join('\n          ') + '\n        </div>\n        <div class="analysis correct show">\n          <strong>✓ 回答正确</strong>\n          <p>' + q.analysis + '</p>\n        </div>\n      </div>\n      <p style="text-align:center;margin-top:20px;font-size:14px">如果答错，<strong>错因分析 Agent</strong> 会更新画像并推荐补救资源</p>\n    </div>';
+  }
+
+  function renderStepPath() {
+    var steps = ZHIXUE_MOCK.pathCards;
+    return '\n    <div class="center-stage" style="max-width:800px;padding-top:40px">\n      <h1 style="font-size:clamp(28px,4vw,40px);text-align:center">学习路径推荐</h1>\n      <p style="text-align:center;font-size:16px">路径规划 Agent 根据画像 + 错因分析推荐下一步任务</p>\n      <div class="path-board" style="margin-top:24px">\n        ' + steps.map(function (step, i) {
+      return '\n        <div class="path-card slide-up" style="animation-delay:' + (i * 0.2) + 's">\n          <div class="path-index">' + step[0] + '</div>\n          <div>\n            <h3>' + step[1] + '</h3>\n            <p>' + step[2] + '</p>\n          </div>\n          <small>' + step[3] + '</small>\n        </div>';
+    }).join('\n        ') + '\n      </div>\n      <p style="text-align:center;margin-top:20px;font-size:14px">从基础回顾到综合挑战，<strong>路径清晰、有预计时间、有明确输出</strong></p>\n    </div>';
+  }
+
+  function renderStepTeacher() {
+    var teacher = ZHIXUE_MOCK.teacher;
+    var metrics = teacher.dashboard;
+    var weaknesses = teacher.classroom.topWeaknesses;
+    return '\n    <div class="space-shell" style="max-width:1100px;padding-top:40px">\n      <h1 style="font-size:clamp(28px,4vw,40px);text-align:center">教师学情看板</h1>\n      <p style="text-align:center;font-size:16px">教师端实时查看班级掌握度、薄弱点和 AI 资源统计</p>\n      <div class="teacher-cards" style="margin-top:24px">\n        ' + metrics.map(function (m, i) {
+      var changeHtml = m.change
+        ? ' <span class="metric-change ' + (m.changeDirection || 'up') + '">' + m.change + '</span>'
+        : '';
+      return '\n        <div class="metric-card slide-up" style="animation-delay:' + (i * 0.2) + 's">\n          <h3>' + m.title + '</h3>\n          <span class="metric-value">' + m.value + changeHtml + '</span>\n          <p>' + m.description + '</p>\n        </div>';
+    }).join('\n        ') + '\n      </div>\n      <div class="dashboard-section" style="margin-top:24px">\n        <h2>班级薄弱点排行</h2>\n        <div class="weakness-list">\n          ' + weaknesses.map(function (w) {
+      return '<div class="weakness-item"><span class="weakness-name">' + w.name + '</span><span class="weakness-count">' + w.count + ' 名学生</span></div>';
+    }).join('\n          ') + '\n        </div>\n      </div>\n      <p style="text-align:center;margin-top:24px;font-size:14px">\n        完整闭环：<strong>学生输入 → 画像 → 多Agent协作 → 资源 → 测评 → 路径 → 教师看板</strong>\n      </p>\n    </div>';
+  }
+
+  // ---- 步骤指示器 ---- //
+
+  function renderStepIndicator() {
+    var el = document.getElementById('stepIndicator');
+    var html = '';
+    for (var i = 0; i < demoSteps.length; i++) {
+      if (i > 0) {
+        html += '<div class="step-line' + (i <= currentStep ? ' completed' : '') + '"></div>';
+      }
+      var cls = 'step-dot';
+      if (i === currentStep) cls += ' active';
+      else if (i < currentStep) cls += ' completed';
+      html += '\n      <div class="step-dot-group">\n        <button class="' + cls + '" data-step="' + i + '" title="' + demoSteps[i].title + '">\n          ' + demoSteps[i].icon + '\n          <span class="step-label">' + demoSteps[i].title + '</span>\n        </button>\n      </div>';
+    }
+    el.innerHTML = html;
+
+    // 绑定点击
+    el.querySelectorAll('.step-dot').forEach(function (dot) {
+      dot.addEventListener('click', function () {
+        goToStep(parseInt(this.dataset.step));
+      });
+    });
+  }
+
+  // ---- 导航 ---- //
+
+  function goToStep(index) {
+    if (index < 0 || index >= demoSteps.length) return;
+
+    var content = document.getElementById('demoContent');
+
+    // 淡出
+    content.classList.add('fade-out');
+
+    setTimeout(function () {
+      currentStep = index;
+      var step = demoSteps[index];
+
+      content.innerHTML = step.render();
+      content.classList.remove('fade-out');
+
+      renderStepIndicator();
+      updateButtons();
+
+      document.getElementById('stepCounter').textContent =
+        'Step ' + (index + 1) + ' / ' + demoSteps.length;
+    }, 250);
+  }
+
+  function nextStep() {
+    if (currentStep < demoSteps.length - 1) {
+      goToStep(currentStep + 1);
+    } else {
+      stopAutoPlay();
+    }
+  }
+
+  function prevStep() {
+    if (currentStep > 0) {
+      goToStep(currentStep - 1);
+    }
+  }
+
+  function updateButtons() {
+    document.getElementById('prevBtn').disabled = currentStep === 0;
+    document.getElementById('nextBtn').disabled = currentStep === demoSteps.length - 1;
+  }
+
+  // ---- 自动播放 ---- //
+
+  function toggleAutoPlay() {
+    if (autoPlaying) {
+      stopAutoPlay();
+    } else {
+      startAutoPlay();
+    }
+  }
+
+  function startAutoPlay() {
+    autoPlaying = true;
+    var btn = document.getElementById('autoPlayBtn');
+    btn.textContent = '⏸ 暂停';
+    btn.classList.add('paused');
+
+    scheduleNext();
+  }
+
+  function stopAutoPlay() {
+    autoPlaying = false;
+    clearTimeout(autoPlayTimer);
+    var btn = document.getElementById('autoPlayBtn');
+    btn.textContent = '▶ 自动演示';
+    btn.classList.remove('paused');
+  }
+
+  function scheduleNext() {
+    if (!autoPlaying) return;
+    var speed = parseInt(document.getElementById('speedSelect').value) || 3500;
+    autoPlayTimer = setTimeout(function () {
+      if (currentStep < demoSteps.length - 1) {
+        nextStep();
+        scheduleNext();
+      } else {
+        stopAutoPlay();
+      }
+    }, speed);
+  }
+
+  // ---- 初始化 ---- //
+
+  function init() {
+    document.getElementById('prevBtn').addEventListener('click', prevStep);
+    document.getElementById('nextBtn').addEventListener('click', nextStep);
+    document.getElementById('autoPlayBtn').addEventListener('click', toggleAutoPlay);
+
+    goToStep(0);
+  }
+
+  init();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,928 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>智学工坊</title>
+  <link rel="stylesheet" href="shared/styles.css" />
+  <style>
+    /* ---- 登录注册 / 用户区样式 ---- */
+
+    .user-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-login,
+    .btn-register {
+      min-height: 32px;
+      padding: 0 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .btn-login {
+      color: var(--blue);
+      background: transparent;
+      border: 1px solid var(--blue);
+    }
+
+    .btn-login:hover {
+      color: #fff;
+      background: var(--blue);
+    }
+
+    .btn-register {
+      color: #fff;
+      background: var(--blue);
+      border: 1px solid var(--blue);
+    }
+
+    .btn-register:hover {
+      filter: brightness(1.1);
+    }
+
+    /* 登录后的用户标签 */
+    .user-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      font-size: 13px;
+      color: var(--ink);
+    }
+
+    .user-badge .role-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 2px;
+    }
+
+    .user-badge .role-dot.workspace { background: var(--blue); }
+
+    .btn-logout {
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--muted);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-logout:hover {
+      color: var(--error);
+      border-color: var(--error);
+    }
+
+    /* 弹窗遮罩 */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(45, 41, 37, 0.4);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    /* 弹窗卡片 */
+    .modal-card {
+      width: min(420px, 90vw);
+      padding: 36px 32px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 24px 64px rgba(58, 45, 31, 0.18);
+      animation: slide-up 0.3s ease;
+    }
+
+    .modal-card h2 {
+      margin-bottom: 6px;
+      font-family: var(--font-serif);
+      font-size: 28px;
+    }
+
+    .modal-card .modal-sub {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .modal-card .field {
+      margin-bottom: 16px;
+    }
+
+    .modal-card .field label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .modal-card .field input[type="text"],
+    .modal-card .field input[type="email"] {
+      width: 100%;
+      min-height: 42px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fffdf9;
+      color: var(--ink);
+      font-size: 15px;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .modal-card .field input:focus {
+      border-color: var(--blue);
+    }
+
+    /* 角色选择卡片 */
+    .role-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .role-option {
+      padding: 14px;
+      border: 2px solid var(--line);
+      border-radius: 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #fffdf9;
+    }
+
+    .role-option:hover {
+      border-color: #dacfc1;
+    }
+
+    .role-option.selected {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .role-option .role-opt-icon {
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+
+    .role-option .role-opt-label {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .role-option .role-opt-desc {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .modal-actions button {
+      flex: 1;
+    }
+
+    .btn-full {
+      min-height: 44px;
+      width: 100%;
+      padding: 0 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-full.primary {
+      color: #fff;
+      background: var(--blue);
+    }
+
+    .btn-full.primary:hover {
+      filter: brightness(1.1);
+    }
+
+    .btn-full.ghost {
+      color: var(--muted);
+      background: transparent;
+      border: 1px solid var(--line);
+    }
+
+    .btn-full.ghost:hover {
+      border-color: var(--ink);
+      color: var(--ink);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .modal-close:hover {
+      background: var(--paper-deep);
+      color: var(--ink);
+    }
+
+    /* Demo 入口 */
+    .demo-entry {
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 6px;
+      border: 1px dashed var(--line);
+      background: transparent;
+      color: var(--muted);
+      font-size: 11px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .demo-entry:hover {
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    /* 错误提示 */
+    .field-error {
+      color: var(--error);
+      font-size: 12px;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .field-error.show {
+      display: block;
+    }
+
+    /* 时间线组件 */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      margin-top: 8px;
+    }
+
+    .timeline-row {
+      display: grid;
+      grid-template-columns: 40px minmax(0, 1fr);
+      gap: 0;
+    }
+
+    .timeline-gutter {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 4px;
+    }
+
+    .timeline-dot {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 2px solid var(--line);
+      background: #fff;
+      flex-shrink: 0;
+    }
+
+    .timeline-line {
+      width: 2px;
+      flex: 1;
+      min-height: 24px;
+      background: var(--line);
+      margin: 4px 0;
+    }
+
+    .timeline-line.completed {
+      background: var(--green);
+    }
+
+    .timeline-card {
+      margin-left: 12px;
+      margin-bottom: 8px;
+      padding: 16px 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(58, 45, 31, 0.04);
+      transition: all 0.2s ease;
+    }
+
+    .timeline-card:hover {
+      border-color: var(--blue);
+      box-shadow: 0 14px 36px rgba(58, 45, 31, 0.07);
+    }
+
+    .timeline-card.active {
+      border-color: var(--blue);
+      background: #fdfdff;
+    }
+
+    /* 资源预览提示条 */
+    .preview-notice {
+      margin-top: 16px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    /* 掌握度条形图 */
+    .mastery-row {
+      display: grid;
+      grid-template-columns: 100px minmax(0, 1fr) 40px;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .mastery-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .mastery-track {
+      height: 10px;
+      border-radius: 5px;
+      background: var(--line);
+      overflow: hidden;
+    }
+
+    .mastery-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.6s ease;
+    }
+
+    .mastery-fill.high { background: var(--green); }
+    .mastery-fill.mid { background: var(--blue); }
+    .mastery-fill.low { background: var(--amber); }
+
+    .mastery-pct {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    /* 分布条形图 */
+    .dist-row {
+      display: grid;
+      grid-template-columns: 50px minmax(0, 1fr) 40px;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .dist-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .dist-track {
+      height: 24px;
+      border-radius: 6px;
+      background: var(--line);
+      overflow: hidden;
+    }
+
+    .dist-fill {
+      height: 100%;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+      font-size: 11px;
+      color: #fff;
+      font-weight: 700;
+      min-width: fit-content;
+      transition: width 0.6s ease;
+    }
+
+    .dist-fill.excellent { background: var(--green); }
+    .dist-fill.good { background: var(--blue); }
+    .dist-fill.average { background: var(--amber); }
+    .dist-fill.struggling { background: var(--error); }
+
+    .dist-count {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+
+    <!-- 左侧导航 -->
+    <aside class="rail" id="mainNav" aria-label="主导航">
+      <div class="rail-logo" title="智学工坊">智</div>
+
+      <button class="rail-btn active" data-route="chat" title="学习诊断">&#x2318;</button>
+      <button class="rail-btn" data-route="profile" title="学生画像">&#x263A;</button>
+      <button class="rail-btn" data-route="resources" title="学习资源">&#x25A1;</button>
+      <button class="rail-btn" data-route="tutor" title="智能辅导">&#x1F4AC;</button>
+      <button class="rail-btn" data-route="quiz" title="练习测评">&#x270E;</button>
+      <button class="rail-btn" data-route="path" title="学习路径">&#x21E2;</button>
+      <button class="rail-btn" data-route="report" title="学习报告">&#x1F4CA;</button>
+
+      <div class="rail-divider"></div>
+
+      <button class="rail-btn" data-route="agents" title="Agent 协作">&#x25CE;</button>
+      <button class="rail-btn" data-route="knowledge" title="课程知识库">&#x25C7;</button>
+      <button class="rail-btn" data-route="review" title="AI 资源审核">&#x2713;</button>
+      <button class="rail-btn" data-route="classroom" title="班级学情">&#x263C;</button>
+      <button class="rail-btn" data-route="advice" title="教学建议">&#x1F4DD;</button>
+
+      <div class="rail-divider"></div>
+
+      <button class="rail-btn" data-route="tasks" title="生成任务">&#x2699;</button>
+      <button class="rail-btn" data-route="safety" title="安全审核">&#x26E8;</button>
+      <button class="rail-btn" data-route="settings" title="模型配置">&#x2691;</button>
+
+      <div class="rail-bottom"></div>
+    </aside>
+
+    <main class="main" id="mainContent">
+
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div class="crumb">
+          <span id="roleLabel">访客体验</span>
+          <span class="crumb-sep">/</span>
+          <strong id="pageMeta">学习诊断</strong>
+        </div>
+        <div class="top-actions">
+          <!-- 未登录 -->
+          <div class="user-area" id="loggedOut">
+            <button class="btn-login" id="btnLogin">登录</button>
+            <button class="btn-register" id="btnRegister">注册</button>
+          </div>
+
+          <!-- 已登录 -->
+          <div class="user-area" id="loggedIn" style="display:none">
+            <span class="user-badge" id="userBadge"></span>
+            <button class="btn-logout" id="btnLogout">退出</button>
+          </div>
+        </div>
+      </header>
+
+      <!-- ========== 页面区域 ========== -->
+
+      <!-- 学习诊断 -->
+      <section class="page active" id="section-chat">
+        <div class="hero-chat">
+          <p class="soft-label">智学工坊 · Python 程序设计</p>
+          <h1>今天想解决哪个学习卡点？</h1>
+          <p class="hero-copy">先用一句话描述你的基础、目标和困难，系统会生成学生画像，再逐步进入资源、练习和路径空间。</p>
+
+          <div class="composer">
+            <textarea id="studentNeed" rows="5">我 Python 基础一般，循环和函数不太会，想准备期末考试。</textarea>
+            <div class="composer-footer">
+              <div class="composer-tools">
+                <button class="tool-pill active">Chat</button>
+                <button class="tool-pill">Attach</button>
+              </div>
+              <div class="composer-tools">
+                <span class="model-pill">glm-4.7-flash</span>
+                <button class="send-btn" id="diagnoseBtn" title="开始诊断">&#x2191;</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="quick-prompts">
+            <button class="quick-btn">循环嵌套总是数错次数</button>
+            <button class="quick-btn">函数参数和返回值分不清</button>
+            <button class="quick-btn">想要一份期末复习路径</button>
+          </div>
+        </div>
+
+        <div class="result-drawer" id="profileDrawer">
+          <div class="drawer-header">
+            <div>
+              <p class="soft-label">Profile generated</p>
+              <h2>学生画像</h2>
+            </div>
+            <button class="primary-action" id="gotoResourcesBtn">生成学习资源 &#x2192;</button>
+          </div>
+          <div class="profile-grid" id="profileGrid"></div>
+          <div class="dashboard-section" style="margin-top:20px" id="masterySection">
+            <h2>知识点掌握度</h2>
+            <div id="masteryChart"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 学习资源 -->
+      <section class="page" id="section-resources">
+        <div class="space-shell">
+          <div class="space-heading">
+            <p class="soft-label">Viewer</p>
+            <h1>学习资源</h1>
+            <p id="resourceSubtitle">每类资源独立展示，避免把讲义、题目、代码、导图全部挤在一个工作台里。</p>
+          </div>
+          <div class="resource-layout">
+            <aside class="resource-list" id="resourceList"></aside>
+            <article class="reader-card" id="resourceReader"></article>
+          </div>
+          <div class="preview-notice" id="previewNotice" style="display:none">
+            &#x1F4AC; 这是示例资源预览。进入学生空间后，系统会根据你的画像生成个性化内容。
+          </div>
+        </div>
+      </section>
+
+      <!-- Agent 协作 -->
+      <section class="page" id="section-agents">
+        <div class="center-stage">
+          <p class="soft-label">Activity</p>
+          <h1>Agent 协作中心</h1>
+          <p>把多智能体运行过程单独放在 Activity 页面，演示时可以清楚展示"不是单一 Prompt"。</p>
+          <div class="agent-flow" id="agentFlow"></div>
+          <div class="preview-notice" id="agentsPreviewNotice" style="display:none">
+            &#x1F4AC; 这是 Agent 协作示例。进入空间后可查看真实的 Agent 运行状态。
+          </div>
+        </div>
+      </section>
+
+      <!-- 学生画像 -->
+      <section class="page" id="section-profile">
+        <div class="center-stage">
+          <p class="soft-label">Profile</p>
+          <h1>学生画像</h1>
+          <p>系统根据你的输入自动生成的学习画像，每次诊断后会更新。</p>
+          <div class="profile-grid" id="profilePageGrid"></div>
+          <div class="dashboard-section" style="margin-top:20px">
+            <h2>知识点掌握度</h2>
+            <div id="profileMasteryChart"></div>
+          </div>
+          <div style="margin-top:24px">
+            <button class="primary-action" id="gotoResourcesFromProfile">生成个性化资源 &#x2192;</button>
+            <button class="primary-action secondary" id="gotoQuizFromProfile" style="margin-left:8px">开始练习测评</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 练习测评 -->
+      <section class="page" id="section-quiz">
+        <div class="center-stage narrow">
+          <p class="soft-label">Quiz</p>
+          <h1>练习测评</h1>
+          <p>选择、填空、代码三种题型，支持切换。系统会根据作答给出错因分析，并更新学习路径。</p>
+          <div class="quiz-card" id="quizCard"></div>
+        </div>
+      </section>
+
+      <!-- 学习路径 -->
+      <section class="page" id="section-path">
+        <div class="center-stage">
+          <p class="soft-label">Space</p>
+          <h1>学习路径</h1>
+          <p>路径以时间线展示，告诉你下一步该学什么、为什么学、交付什么。已完成步骤用绿色标记。</p>
+          <div class="path-board" id="pathBoard"></div>
+        </div>
+      </section>
+
+      <!-- 教师看板 -->
+      <section class="page" id="section-dashboard">
+        <div class="space-shell">
+          <div class="space-heading">
+            <p class="soft-label">Dashboard</p>
+            <h1>学情看板</h1>
+            <p>教学管理区保持简洁，展示班级薄弱点、资源生成情况和下节课建议。</p>
+          </div>
+          <div class="teacher-cards" id="dashboardCards"></div>
+          <div class="dashboard-section" style="margin-top:24px">
+            <h2>掌握度分布</h2>
+            <div id="distributionChart"></div>
+          </div>
+          <div class="dashboard-section" style="margin-top:24px">
+            <h2>班级薄弱点排行</h2>
+            <div class="weakness-list" id="weaknessList"></div>
+          </div>
+          <div class="dashboard-section" style="margin-top:24px">
+            <h2>教学建议</h2>
+            <div id="teachingAdvice"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 课程知识库 -->
+      <section class="page" id="section-knowledge">
+        <div class="space-shell">
+          <div class="space-heading">
+            <p class="soft-label">Knowledge</p>
+            <h1>课程知识库</h1>
+            <p>教师上传课件、题库和实验指导后，系统解析章节、知识点和可检索资源。</p>
+          </div>
+          <div class="knowledge-grid">
+            <div class="upload-card">
+              <span class="upload-icon">&#xFF0B;</span>
+              <h2>上传课程资料</h2>
+              <p>支持课件、实验指导、题库、示例代码。</p>
+              <button class="primary-action">选择文件</button>
+            </div>
+            <div class="chapter-list" id="chapterList"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 资源审核 -->
+      <section class="page" id="section-review">
+        <div class="space-shell">
+          <div class="space-heading">
+            <p class="soft-label">Review</p>
+            <h1>AI 资源审核</h1>
+            <p>审核 AI 生成的讲义、题目和代码，确保质量后再发布给学生。</p>
+          </div>
+          <div class="review-list" id="reviewList"></div>
+        </div>
+      </section>
+
+      <!-- 班级学情 -->
+      <section class="page" id="section-classroom">
+        <div class="space-shell">
+          <div class="space-heading">
+            <p class="soft-label">Classroom</p>
+            <h1>班级学情分析</h1>
+            <p>查看全班掌握度分布、每位学生进度和薄弱点，针对性干预。</p>
+          </div>
+          <div class="teacher-cards" id="classroomMetrics"></div>
+          <div class="dashboard-section" style="margin-top:24px">
+            <h2>学生列表</h2>
+            <table class="student-table" id="studentTable">
+              <thead>
+                <tr>
+                  <th>姓名</th>
+                  <th>掌握度</th>
+                  <th>状态</th>
+                  <th>最近活动</th>
+                  <th>薄弱点</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 智能辅导（学生） -->
+      <section class="page" id="section-tutor">
+        <div class="space-shell">
+          <div class="space-heading">
+            <p class="soft-label">Tutor</p>
+            <h1>智能辅导</h1>
+            <p>对当前学习内容提问，AI 辅导老师即时答疑。支持文字、图解和视频讲解。</p>
+          </div>
+          <div class="resource-layout">
+            <aside class="resource-list" id="tutorHistory"></aside>
+            <article class="reader-card" id="tutorDetail"></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 学习报告（学生） -->
+      <section class="page" id="section-report">
+        <div class="space-shell">
+          <div class="space-heading">
+            <p class="soft-label">Report</p>
+            <h1>学习报告</h1>
+            <p>周期学习总结，包含掌握度变化、测评结果、资源使用和下周建议。</p>
+          </div>
+          <div id="reportContent"></div>
+        </div>
+      </section>
+
+      <!-- 教学建议（教师） -->
+      <section class="page" id="section-advice">
+        <div class="space-shell">
+          <div class="space-heading">
+            <p class="soft-label">Teaching Advice</p>
+            <h1>教学建议</h1>
+            <p>根据全班薄弱点和学习进度，AI 生成下节课教学建议和补充材料。</p>
+          </div>
+          <div class="teacher-cards" id="adviceMetrics"></div>
+          <div class="dashboard-section" style="margin-top:24px" id="adviceDetail"></div>
+        </div>
+      </section>
+
+      <!-- 生成任务队列（系统） -->
+      <section class="page" id="section-tasks">
+        <div class="space-shell">
+          <div class="space-heading">
+            <p class="soft-label">Task Queue</p>
+            <h1>生成任务队列</h1>
+            <p>跟踪 PPT、视频、题库等耗时生成任务的进度，避免长时间白屏等待。</p>
+          </div>
+          <div class="task-list" id="taskList"></div>
+        </div>
+      </section>
+
+      <!-- 安全与防幻觉（系统） -->
+      <section class="page" id="section-safety">
+        <div class="space-shell">
+          <div class="space-heading">
+            <p class="soft-label">Safety</p>
+            <h1>安全与防幻觉</h1>
+            <p>展示生成内容的来源引用、事实检查和敏感内容审核记录。</p>
+          </div>
+          <div class="safety-list" id="safetyList"></div>
+        </div>
+      </section>
+
+      <!-- 模型与工具配置（系统） -->
+      <section class="page" id="section-settings">
+        <div class="space-shell">
+          <div class="space-heading">
+            <p class="soft-label">Settings</p>
+            <h1>模型与工具配置</h1>
+            <p>展示系统使用的大模型、框架、向量库和开源项目引用。</p>
+          </div>
+          <div class="settings-grid" id="settingsModels"></div>
+          <div class="dashboard-section" style="margin-top:24px">
+            <h2>开源项目引用</h2>
+            <div id="settingsRefs"></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- 登录/注册弹窗（复用同一套结构） -->
+  <div class="modal-overlay" id="entryModal">
+    <div class="modal-card" style="position:relative">
+      <button class="modal-close" id="closeEntryModal">&times;</button>
+      <h2 id="entryTitle">登录</h2>
+      <p class="modal-sub" id="entrySub">输入昵称，进入智学工坊空间</p>
+      <div class="field">
+        <label>昵称</label>
+        <input type="text" id="entryName" placeholder="输入你的昵称" value="张三" />
+        <span class="field-error" id="entryNameError">请输入昵称</span>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-full ghost" id="cancelEntry">取消</button>
+        <button class="btn-full primary" id="confirmEntry">登录并进入</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 脚本 -->
+  <script src="mock/index.js"></script>
+  <script src="mock/profile.js"></script>
+  <script src="mock/resources.js"></script>
+  <script src="mock/quiz.js"></script>
+  <script src="mock/path.js"></script>
+  <script src="mock/knowledge.js"></script>
+  <script src="mock/agents.js"></script>
+  <script src="mock/teacher.js"></script>
+  <script src="mock/tutor.js"></script>
+  <script src="mock/report.js"></script>
+  <script src="mock/system.js"></script>
+  <script src="shared/router.js"></script>
+  <script src="shared/state.js"></script>
+  <script src="shared/api.js"></script>
+  <script src="pages/student.js"></script>
+  <script src="pages/teacher.js"></script>
+  <script src="pages/agents.js"></script>
+  <script src="routes/route-config.js"></script>
+  <script>
+  /* ============================================================
+     智学工坊 — 主入口：事件绑定 + 初始化
+     ============================================================ */
+  (function () {
+    'use strict';
+    var S = ZhixueState;
+    var entryMode = 'login';
+
+    // ---- 登录/退出逻辑 ---- //
+
+    function doLogin(name) {
+      S.currentUser = { name: name, role: 'workspace' };
+      document.getElementById('loggedOut').style.display = 'none';
+      document.getElementById('loggedIn').style.display = 'flex';
+      document.getElementById('userBadge').innerHTML =
+        '<span class="role-dot workspace"></span>@' + name + ' · 智学空间';
+      ZhixueApp.setRole('workspace');
+      document.getElementById('roleLabel').textContent = S.roleLabels.workspace || ZhixueApp.getRoleLabel();
+    }
+
+    function doLogout() {
+      S.currentUser = null;
+      document.getElementById('loggedOut').style.display = 'flex';
+      document.getElementById('loggedIn').style.display = 'none';
+      ZhixueApp.setRole('default');
+      document.getElementById('roleLabel').textContent = S.roleLabels.default;
+      S.updatePreviewNotice();
+    }
+
+    function openEntryModal(mode) {
+      entryMode = mode || 'login';
+      var isRegister = entryMode === 'register';
+      document.getElementById('entryTitle').textContent = isRegister ? '注册' : '登录';
+      document.getElementById('entrySub').textContent = isRegister
+        ? '创建演示账号，进入完整功能空间'
+        : '输入昵称，进入智学工坊空间';
+      document.getElementById('confirmEntry').textContent = isRegister ? '注册并进入' : '登录并进入';
+      document.getElementById('entryName').value = isRegister ? '' : '张三';
+      document.getElementById('entryName').placeholder = isRegister ? '输入你的昵称，例如：李同学' : '输入你的昵称';
+      document.getElementById('entryNameError').classList.remove('show');
+      S.showModal('entryModal');
+    }
+
+    // ---- 路由初始化 ---- //
+
+    var cfg = ZhixueRouteConfig;
+    ZhixueApp.init({
+      defaultRole: 'default',
+      containerId: 'mainContent',
+      metaId: 'pageMeta',
+      navParentId: 'mainNav',
+      roles: cfg.roles
+    });
+
+    ZhixueApp.onRoleChange(function (roleKey) {
+      document.getElementById('roleLabel').textContent = S.roleLabels[roleKey] || ZhixueApp.getRoleLabel();
+      S.updatePreviewNotice();
+    });
+
+    // ---- 事件绑定 ---- //
+
+    // 登录/注册弹窗
+    document.getElementById('btnLogin').addEventListener('click', function () { openEntryModal('login'); });
+    document.getElementById('btnRegister').addEventListener('click', function () { openEntryModal('register'); });
+    document.getElementById('closeEntryModal').addEventListener('click', function () { S.hideModal('entryModal'); });
+    document.getElementById('cancelEntry').addEventListener('click', function () { S.hideModal('entryModal'); });
+    document.getElementById('entryModal').addEventListener('click', function (e) { if (e.target === this) S.hideModal('entryModal'); });
+
+    document.getElementById('confirmEntry').addEventListener('click', function () {
+      var name = document.getElementById('entryName').value.trim();
+      if (!name) { document.getElementById('entryNameError').classList.add('show'); return; }
+      document.getElementById('entryNameError').classList.remove('show');
+      S.hideModal('entryModal');
+      doLogin(name);
+    });
+
+    document.getElementById('btnLogout').addEventListener('click', doLogout);
+
+    // 诊断按钮
+    document.getElementById('diagnoseBtn').addEventListener('click', function () {
+      var drawer = document.getElementById('profileDrawer');
+      drawer.classList.add('show');
+      ZhixuePages.renderProfileGrid('profileGrid');
+      drawer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    // 跳转按钮
+    document.getElementById('gotoResourcesBtn').addEventListener('click', function () { ZhixueApp.navigate('resources'); });
+    document.getElementById('gotoResourcesFromProfile').addEventListener('click', function () { ZhixueApp.navigate('resources'); });
+    document.getElementById('gotoQuizFromProfile').addEventListener('click', function () { ZhixueApp.navigate('quiz'); });
+
+    // 快速提示词
+    document.querySelectorAll('.quick-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () { document.getElementById('studentNeed').value = this.textContent; });
+    });
+
+    // 初始渲染
+    ZhixuePages.renderProfileGrid('profileGrid');
+    S.updatePreviewNotice();
+  })();
+  </script>
+</body>
+</html>
