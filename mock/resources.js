@@ -50,6 +50,36 @@
       difficulty: 'easy',
       body: '\n      <h2>拓展阅读</h2>\n      <ul>\n        <li>课程课件：第 4 章循环结构</li>\n        <li>实验指导：实验 4-2 成绩批量处理</li>\n        <li>易错题库：循环边界与函数返回值专题</li>\n      </ul>\n    ',
       createdAt: '2026-06-03T08:05:00Z'
+    },
+    {
+      id: 'video',
+      type: '视频',
+      title: '多模态教学视频/动画',
+      description: '循环嵌套执行过程动画',
+      tags: ['循环嵌套', '动画', '可视化'],
+      difficulty: 'easy',
+      body: '\n      <h2>多模态教学视频/动画</h2>\n      <div class="state-empty" style="min-height:200px;background:var(--paper-deep);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-direction:column">\n        <p style="font-size:48px;margin-bottom:8px">🎬</p>\n        <p>循环嵌套执行过程动画演示</p>\n        <p style="font-size:12px;color:var(--muted)">基于 SeeDance 生成 · 时长 2:30</p>\n        <button class="primary-action secondary" style="margin-top:12px">▶ 播放动画</button>\n      </div>\n      <ul style="margin-top:16px">\n        <li>for 循环单步执行可视化</li>\n        <li>双重嵌套循环执行轨迹</li>\n        <li>变量值实时追踪</li>\n      </ul>\n    ',
+      createdAt: '2026-06-03T08:06:00Z'
+    },
+    {
+      id: 'ppt',
+      type: 'PPT',
+      title: 'PPT 课件',
+      description: '循环结构考前复习课件',
+      tags: ['PPT', '复习', '课件'],
+      difficulty: 'easy',
+      body: '\n      <h2>PPT 课件</h2>\n      <div class="state-empty" style="min-height:160px;background:var(--paper-deep);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-direction:column">\n        <p style="font-size:36px;margin-bottom:8px">📊</p>\n        <p>循环结构考前复习课件（12 页）</p>\n        <p style="font-size:12px;color:var(--muted)">包含章节概要、知识导图、典型例题和易错点总结</p>\n        <button class="primary-action secondary" style="margin-top:12px">⬇ 下载 PPT</button>\n      </div>\n    ',
+      createdAt: '2026-06-03T08:07:00Z'
+    },
+    {
+      id: 'project',
+      type: '项目',
+      title: '实践项目学习材料',
+      description: '成绩管理与分析系统',
+      tags: ['项目', '综合', '实战'],
+      difficulty: 'hard',
+      body: '\n      <h2>实践项目学习材料</h2>\n      <h3>成绩管理与分析系统</h3>\n      <p>综合运用循环、函数、列表、文件操作等知识，完成一个完整的成绩管理系统。</p>\n      <ul>\n        <li><strong>阶段一：</strong>实现成绩录入与存储（列表 + 循环）</li>\n        <li><strong>阶段二：</strong>成绩统计与分析（函数 + 排序）</li>\n        <li><strong>阶段三：</strong>数据持久化（文件读写）</li>\n        <li><strong>阶段四：</strong>生成成绩报告（格式化输出）</li>\n      </ul>\n      <div class="preview-notice" style="margin-top:16px">💡 项目包含完整的实验指导书、代码框架和评分标准。</div>\n    ',
+      createdAt: '2026-06-03T08:08:00Z'
     }
   ];
 })();

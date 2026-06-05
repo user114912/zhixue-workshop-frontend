@@ -101,7 +101,7 @@
 
     /* 弹窗卡片 */
     .modal-card {
-      width: min(420px, 90vw);
+      width: min(440px, 90vw);
       padding: 36px 32px;
       background: #fff;
       border-radius: 20px;
@@ -134,7 +134,8 @@
     }
 
     .modal-card .field input[type="text"],
-    .modal-card .field input[type="email"] {
+    .modal-card .field input[type="email"],
+    .modal-card .field input[type="password"] {
       width: 100%;
       min-height: 42px;
       padding: 0 14px;
@@ -283,6 +284,40 @@
     }
 
     .field-error.show {
+      display: block;
+    }
+
+    /* 表单底部链接 */
+    .form-links {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      font-size: 13px;
+    }
+
+    .form-links a {
+      color: var(--blue);
+      text-decoration: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .form-links a:hover {
+      opacity: 0.7;
+    }
+
+    /* 忘记密码弹窗 */
+    .forgot-password-area {
+      display: none;
+      padding: 16px;
+      margin-top: 12px;
+      border-radius: 10px;
+      background: var(--paper-deep);
+      border: 1px solid var(--line);
+    }
+
+    .forgot-password-area.show {
       display: block;
     }
 
@@ -549,8 +584,8 @@
   <!-- 未登录演示界面 -->
   <div class="landing" id="landingPage">
     <div class="landing-hero">
-      <h1 class="landing-title">OpenHLG</h1>
-      <p class="landing-subtitle">面向高校课程的个性化学习资源生成与多智能体学习系统</p>
+      <h1 class="landing-title">智学工坊</h1>
+      <p class="landing-subtitle">OpenHLG · 面向高校课程的个性化学习资源生成与多智能体学习系统</p>
       <div class="landing-capabilities">
         <div class="capability-item">💬 对话式学习画像</div>
         <div class="capability-item">🤖 多智能体资源生成</div>
@@ -569,23 +604,56 @@
 
     <!-- 左侧导航 -->
     <aside class="rail" id="mainNav" aria-label="主导航">
-      <div class="rail-logo" title="智学工坊">智</div>
+      <div class="rail-logo" title="智学工坊"><span class="rail-icon">智</span><span class="rail-label">智学空间</span></div>
 
-	      <button class="rail-btn active" data-route="chat" title="学习诊断">&#x2318;</button>
-	      <button class="rail-btn" data-route="profile" title="学生画像">&#x263A;</button>
-	      <button class="rail-btn" data-route="resources" title="学习资源">&#x25A1;</button>
-	      <button class="rail-btn" data-route="agents" title="Agent 协作">&#x25CE;</button>
-	      <button class="rail-btn" data-route="path" title="学习路径">&#x21E2;</button>
-	      <button class="rail-btn" data-route="tutor" title="智能辅导">&#x1F4AC;</button>
-	      <button class="rail-btn" data-route="quiz" title="练习测评">&#x270E;</button>
-	      <button class="rail-btn" data-route="report" title="学习报告">&#x1F4CA;</button>
-	      <button class="rail-btn" data-route="knowledge" title="课程知识库">&#x25C7;</button>
-	      <button class="rail-btn" data-route="classroom" title="学情分析">&#x263C;</button>
-	      <button class="rail-btn" data-route="advice" title="教学建议">&#x1F4DD;</button>
+      <button class="rail-toggle" id="railToggle" title="展开菜单">
+        <span class="rail-icon">&#x2630;</span>
+        <span class="rail-label">折叠菜单</span>
+      </button>
 
-	      <div class="rail-divider"></div>
+      <button class="rail-btn active" data-route="diagnosis" title="学习需求">
+        <span class="rail-icon">&#x270E;</span>
+        <span class="rail-label">学习需求</span>
+      </button>
+      <button class="rail-btn" data-route="profile" title="学习画像">
+        <span class="rail-icon">&#x263A;</span>
+        <span class="rail-label">学习画像</span>
+      </button>
+      <button class="rail-btn" data-route="resources" title="学习资源">
+        <span class="rail-icon">&#x25A1;</span>
+        <span class="rail-label">学习资源</span>
+      </button>
+      <button class="rail-btn" data-route="path" title="学习路径">
+        <span class="rail-icon">&#x21E2;</span>
+        <span class="rail-label">学习路径</span>
+      </button>
+      <button class="rail-btn" data-route="quiz" title="练习测评">
+        <span class="rail-icon">&#x270E;</span>
+        <span class="rail-label">练习测评</span>
+      </button>
+      <button class="rail-btn" data-route="tutor" title="智能辅导">
+        <span class="rail-icon">&#x1F4AC;</span>
+        <span class="rail-label">智能辅导</span>
+      </button>
+      <button class="rail-btn" data-route="report" title="学习评估">
+        <span class="rail-icon">&#x1F4CA;</span>
+        <span class="rail-label">学习评估</span>
+      </button>
+      <button class="rail-btn" data-route="knowledge" title="课程知识库">
+        <span class="rail-icon">&#x25C7;</span>
+        <span class="rail-label">课程知识库</span>
+      </button>
+      <button class="rail-btn" data-route="agents" title="Agent 协作">
+        <span class="rail-icon">&#x2699;</span>
+        <span class="rail-label">Agent 协作</span>
+      </button>
 
-	      <button class="rail-btn" data-route="settings" title="设置">&#x2691;</button>
+      <div class="rail-divider"></div>
+
+      <button class="rail-btn" data-route="settings" title="设置">
+        <span class="rail-icon">&#x2691;</span>
+        <span class="rail-label">设置</span>
+      </button>
 
       <div class="rail-bottom"></div>
     </aside>
@@ -597,7 +665,7 @@
         <div class="crumb">
           <span id="roleLabel">智学空间</span>
           <span class="crumb-sep">/</span>
-          <strong id="pageMeta">学习诊断</strong>
+          <strong id="pageMeta">学习需求</strong>
         </div>
         <div class="top-actions">
           <!-- 未登录 -->
@@ -616,50 +684,94 @@
 
       <!-- ========== 页面区域 ========== -->
 
-      <!-- 学习诊断 -->
-      <section class="page active" id="section-chat">
-        <div class="hero-chat">
-          <h1>你好，我是 OpenHLG，今天你想学点什么呢？</h1>
-          <p class="hero-copy">先用一句话描述你的基础、目标和困难，系统会生成学生画像，再逐步进入资源、练习和路径空间。</p>
+                        <!-- 学习需求：输入学习情况，生成学习画像（默认首页） -->
+      <section class="page active" id="section-diagnosis">
+        <div class="diagnosis-hero">
 
-          <div class="composer">
-            <textarea id="studentNeed" rows="5">我 Python 基础一般，循环和函数不太会，想准备期末考试。</textarea>
-            <div class="composer-footer">
-              <div class="composer-tools">
-                <button class="tool-pill active">Chat</button>
-                <button class="tool-pill">Attach</button>
+          <!-- Logo 区域 -->
+          <div class="diag-logo-area">
+            <div class="diag-logo-text">Open<span class="diag-logo-dot"></span>HLG</div>
+            <p class="diag-logo-sub">PERSONALIZED LEARNING WORKSPACE</p>
+          </div>
+
+          <!-- 对话框 -->
+          <div class="diagnosis-panel">
+            <!-- 输入区域 -->
+            <div class="diag-input-area">
+              <textarea id="diagnosisInput" class="diag-textarea"
+                placeholder="What do you want to learn today?"></textarea>
+            </div>
+            <!-- 底部：功能按钮 + 发送 -->
+            <div class="diag-bottom-bar">
+              <div class="diag-func-row">
+                <button class="diag-func-btn active">
+                  <span class="func-icon">&#x1F4AC;</span> Chat
+                </button>
+                <button class="diag-func-btn">
+                  <span class="func-icon">&#x1F4C4;</span> File
+                </button>
+                <button class="diag-func-btn">
+                  <span class="func-icon">&#x1F310;</span> Network
+                </button>
+                <button class="diag-func-btn">
+                  <span class="func-icon">&#x1F4DA;</span> KNB
+                </button>
               </div>
-              <div class="composer-tools">
-                <span class="model-pill">glm-4.7-flash</span>
-                <button class="send-btn" id="diagnoseBtn" title="开始诊断">&#x2191;</button>
+              <div class="diag-right-group">
+                <div class="diag-model-select" id="diagModelSelect" title="Switch model">
+                  <span class="model-dot"></span>
+                  <span class="model-name">GLM-4.7</span>
+                  <span class="model-chevron">&#x25BE;</span>
+                </div>
+                <button class="diag-send-btn" id="diagnosisGenerateBtn" title="Send">&#x2191;</button>
               </div>
             </div>
           </div>
 
-          <div class="quick-prompts">
-            <button class="quick-btn">循环嵌套总是数错次数</button>
-            <button class="quick-btn">函数参数和返回值分不清</button>
-            <button class="quick-btn">想要一份期末复习路径</button>
-          </div>
-        </div>
-
-        <div class="result-drawer" id="profileDrawer">
-          <div class="drawer-header">
-            <div>
-              <p class="soft-label">Profile generated</p>
-              <h2>学生画像</h2>
+                    <!-- 画像草稿 -->
+          <div class="diagnosis-result" id="diagnosisResult" style="display:none">
+            <div class="diag-result-header">
+              <div>
+                <p class="soft-label">Analysis Result</p>
+                <h3>Learning Profile Draft</h3>
+              </div>
+              <button class="primary-action" id="gotoProfileFromDiagnosis">View Full Profile &#x2192;</button>
             </div>
-            <button class="primary-action" id="gotoResourcesBtn">生成学习资源 &#x2192;</button>
-          </div>
-          <div class="profile-grid" id="profileGrid"></div>
-          <div class="dashboard-section" style="margin-top:20px" id="masterySection">
-            <h2>知识点掌握度</h2>
-            <div id="masteryChart"></div>
+            <div class="diag-draft-grid" id="diagnosisDraftContent"></div>
           </div>
         </div>
       </section>
 
-      <!-- 学习资源 -->
+      <!-- 学习画像（诊断结果页） -->
+      <section class="page" id="section-profile">
+        <div class="center-stage" style="max-width:900px">
+          <div class="drawer-header" style="margin-bottom:16px">
+            <div>
+              <p class="soft-label">Profile</p>
+              <h1>学习画像</h1>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button class="primary-action secondary" id="backToDiagnosis" style="font-size:13px">继续对话更新画像</button>
+              <button class="primary-action" id="gotoResourcesFromProfileDrawer">生成学习资源 &#x2192;</button>
+            </div>
+          </div>
+          <div class="profile-grid" id="profilePageGrid"></div>
+          <div class="dashboard-section" style="margin-top:20px">
+            <h2>知识点掌握度</h2>
+            <div id="profileMasteryChart"></div>
+          </div>
+          <div class="dashboard-section" style="margin-top:24px">
+            <h2>画像更新记录</h2>
+            <div id="profileUpdateLog"></div>
+          </div>
+          <div style="margin-top:24px">
+            <button class="primary-action" id="gotoResourcesFromProfile">生成个性化资源 &#x2192;</button>
+            <button class="primary-action secondary" id="gotoQuizFromProfile" style="margin-left:8px">开始练习测评</button>
+          </div>
+        </div>
+      </section>
+
+            <!-- 学习资源 -->
       <section class="page" id="section-resources">
         <div class="space-shell">
           <div class="space-heading">
@@ -677,33 +789,16 @@
         </div>
       </section>
 
-      <!-- Agent 协作 -->
+      <!-- Agent 协作中心 -->
       <section class="page" id="section-agents">
-        <div class="center-stage">
+        <div class="center-stage" style="max-width:900px">
           <p class="soft-label">Activity</p>
           <h1>Agent 协作中心</h1>
-          <p>把多智能体运行过程单独放在 Activity 页面，演示时可以清楚展示"不是单一 Prompt"。</p>
+          <p>多智能体协同工作，主流程串行、资源生成并行。每个 Agent 有独立步骤和输入输出，可追踪、可回溯。</p>
           <div class="agent-flow" id="agentFlow"></div>
+          <div class="agent-timeline" id="agentTimeline"></div>
           <div class="preview-notice" id="agentsPreviewNotice" style="display:none">
             &#x1F4AC; 这是 Agent 协作示例。进入空间后可查看真实的 Agent 运行状态。
-          </div>
-        </div>
-      </section>
-
-      <!-- 学生画像 -->
-      <section class="page" id="section-profile">
-        <div class="center-stage">
-          <p class="soft-label">Profile</p>
-          <h1>学生画像</h1>
-          <p>系统根据你的输入自动生成的学习画像，每次诊断后会更新。</p>
-          <div class="profile-grid" id="profilePageGrid"></div>
-          <div class="dashboard-section" style="margin-top:20px">
-            <h2>知识点掌握度</h2>
-            <div id="profileMasteryChart"></div>
-          </div>
-          <div style="margin-top:24px">
-            <button class="primary-action" id="gotoResourcesFromProfile">生成个性化资源 &#x2192;</button>
-            <button class="primary-action secondary" id="gotoQuizFromProfile" style="margin-left:8px">开始练习测评</button>
           </div>
         </div>
       </section>
@@ -728,7 +823,7 @@
         </div>
       </section>
 
-      <!-- 教师看板 -->
+      <!-- legacy: 教师看板 — 已从主导航移除，代码保留备用 -->
       <section class="page" id="section-dashboard">
         <div class="space-shell">
           <div class="space-heading">
@@ -758,12 +853,12 @@
           <div class="space-heading">
             <p class="soft-label">Knowledge</p>
             <h1>课程知识库</h1>
-            <p>教师上传课件、题库和实验指导后，系统解析章节、知识点和可检索资源。</p>
+            <p>导入课程资料、实验指导、题库和示例代码，系统用于 RAG 检索和资源生成。</p>
           </div>
           <div class="knowledge-grid">
             <div class="upload-card">
               <span class="upload-icon">&#xFF0B;</span>
-              <h2>上传课程资料</h2>
+              <h2>导入课程资料</h2>
               <p>支持课件、实验指导、题库、示例代码。</p>
               <button class="primary-action">选择文件</button>
             </div>
@@ -772,9 +867,9 @@
         </div>
       </section>
 
-      <!-- 资源审核 -->
+      <!-- legacy: 资源审核 — 已从主导航移除，逻辑待后续合并 -->
 
-      <!-- 班级学情 -->
+      <!-- legacy: 班级学情 — 已从主导航移除，代码保留备用 -->
       <section class="page" id="section-classroom">
         <div class="space-shell">
           <div class="space-heading">
@@ -821,14 +916,14 @@
         <div class="space-shell">
           <div class="space-heading">
             <p class="soft-label">Report</p>
-            <h1>学习报告</h1>
+            <h1>学习评估</h1>
             <p>周期学习总结，包含掌握度变化、测评结果、资源使用和下周建议。</p>
           </div>
           <div id="reportContent"></div>
         </div>
       </section>
 
-      <!-- 教学建议（教师） -->
+      <!-- legacy: 教学建议 — 已从主导航移除，代码保留备用 -->
       <section class="page" id="section-advice">
         <div class="space-shell">
           <div class="space-heading">
@@ -841,30 +936,33 @@
         </div>
       </section>
 
-      <!-- 生成任务队列（系统） -->
+      <!-- legacy: 生成任务队列 — 已从主导航移除 -->
 
-      <!-- 安全与防幻觉（系统） -->
+      <!-- legacy: 安全与防幻觉 — 移至文档/资源详情，代码保留 -->
 
-<!-- 设置 -->
+      <!-- 设置 -->
       <section class="page" id="section-settings">
         <div class="space-shell">
           <div class="space-heading">
             <p class="soft-label">Settings</p>
-<h1>设置</h1>
-<p>系统配置信息、技术说明与安全机制。</p>
+            <h1>设置</h1>
+            <p>账号与产品偏好配置。</p>
           </div>
           <div class="dashboard-section" style="margin-top:24px">
-            <h2>当前课程</h2>
-            <div id="settingsCourse"></div>
+            <h2>账号信息</h2>
+            <div id="settingsAccount"></div>
           </div>
-          <div class="settings-grid" id="settingsModels"></div>
-          <div class="dashboard-section" style="margin-top:24px">
-            <h2>开源项目引用</h2>
-            <div id="settingsRefs"></div>
-          <div class="dashboard-section" style="margin-top:24px">
-            <h2>安全与防幻觉机制</h2>
-            <div id="settingsSafety"></div>
+<div class="dashboard-section" style="margin-top:24px">
+            <h2>默认模型</h2>
+            <div class="settings-grid" id="settingsModels"></div>
           </div>
+          <div class="dashboard-section" style="margin-top:24px">
+            <h2>资源生成偏好</h2>
+            <div id="settingsPrefs"></div>
+          </div>
+          <div class="dashboard-section" style="margin-top:24px">
+            <h2>通知与进度提醒</h2>
+            <div id="settingsNotify"></div>
           </div>
         </div>
       </section>
@@ -873,19 +971,73 @@
   </div>
 
   <!-- 登录/注册弹窗（复用同一套结构） -->
+  <!-- 登录 / 注册 / 忘记密码弹窗 -->
   <div class="modal-overlay" id="entryModal">
     <div class="modal-card" style="position:relative">
       <button class="modal-close" id="closeEntryModal">&times;</button>
       <h2 id="entryTitle">登录</h2>
-      <p class="modal-sub" id="entrySub">输入昵称，进入智学工坊空间</p>
-      <div class="field">
-        <label>昵称</label>
-        <input type="text" id="entryName" placeholder="输入你的昵称" value="张三" />
-        <span class="field-error" id="entryNameError">请输入昵称</span>
+      <p class="modal-sub" id="entrySub">请输入学号和密码进入智学工坊</p>
+
+      <!-- 注册专属字段 -->
+      <div class="field" id="fieldSchool" style="display:none">
+        <label>学校名称</label>
+        <input type="text" id="entrySchool" placeholder="请输入学校名称" />
+        <span class="field-error" id="entrySchoolError">请输入学校名称</span>
       </div>
-      <div class="modal-actions">
+      <div class="field" id="fieldRealName" style="display:none">
+        <label>姓名</label>
+        <input type="text" id="entryRealName" placeholder="请输入真实姓名" />
+        <span class="field-error" id="entryRealNameError">请输入真实姓名</span>
+      </div>
+
+      <!-- 登录 + 注册共享字段 -->
+      <div class="field" id="fieldStudentId">
+        <label>学号</label>
+        <input type="text" id="entryStudentId" placeholder="请输入学号" autocomplete="username" />
+        <span class="field-error" id="entryStudentIdError">请输入学号</span>
+      </div>
+      <div class="field" id="fieldPassword">
+        <label>密码</label>
+        <input type="password" id="entryPassword" placeholder="请输入密码（至少6位）" autocomplete="current-password" />
+        <span class="field-error" id="entryPasswordError">密码至少6位</span>
+      </div>
+      <div class="field" id="fieldConfirmPassword" style="display:none">
+        <label>确认密码</label>
+        <input type="password" id="entryConfirmPassword" placeholder="请再次输入密码" autocomplete="new-password" />
+        <span class="field-error" id="entryConfirmPasswordError">两次密码不一致</span>
+      </div>
+
+      <!-- 忘记密码区域 -->
+      <div class="forgot-password-area" id="forgotPasswordArea">
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px">验证身份后即可重置密码</p>
+        <div class="field">
+          <label>姓名</label>
+          <input type="text" id="forgotRealName" placeholder="请输入注册时的真实姓名" />
+          <span class="field-error" id="forgotRealNameError">请输入姓名</span>
+        </div>
+        <div class="field">
+          <label>新密码</label>
+          <input type="password" id="forgotNewPassword" placeholder="请输入新密码（至少6位）" />
+          <span class="field-error" id="forgotNewPasswordError">密码至少6位</span>
+        </div>
+        <div class="field">
+          <label>确认新密码</label>
+          <input type="password" id="forgotConfirmPassword" placeholder="请再次输入新密码" />
+          <span class="field-error" id="forgotConfirmPasswordError">两次密码不一致</span>
+        </div>
+        <button class="btn-full primary" id="confirmResetPassword" style="margin-top:8px">重置密码并登录</button>
+        <button class="btn-full ghost" id="cancelForgotPassword" style="margin-top:6px">返回登录</button>
+      </div>
+
+      <div class="modal-actions" id="entryActions">
         <button class="btn-full ghost" id="cancelEntry">取消</button>
-        <button class="btn-full primary" id="confirmEntry">登录并进入</button>
+        <button class="btn-full primary" id="confirmEntry">登录</button>
+      </div>
+
+      <!-- 底部链接 -->
+      <div class="form-links" id="formLinks">
+        <a href="#" id="toggleMode">还没有账号？去注册</a>
+        <a href="#" id="linkForgotPassword">忘记密码？</a>
       </div>
     </div>
   </div>
@@ -918,18 +1070,62 @@
     var S = ZhixueState;
     var entryMode = 'login';
 
+    // ---- 本地用户存储（Mock 认证） ---- //
+
+    /** 从 localStorage 读取已注册用户列表 */
+    function getStoredUsers() {
+      try {
+        return JSON.parse(localStorage.getItem('zhixue_users') || '[]');
+      } catch (e) {
+        return [];
+      }
+    }
+
+    /** 保存用户列表到 localStorage */
+    function saveStoredUsers(users) {
+      localStorage.setItem('zhixue_users', JSON.stringify(users));
+    }
+
+    /** 根据学号查找用户 */
+    function findUserByStudentId(studentId) {
+      return getStoredUsers().find(function (u) { return u.studentId === studentId; });
+    }
+
+    // 预置一个演示账号
+    (function seedDemo() {
+      var users = getStoredUsers();
+      if (!users.find(function (u) { return u.studentId === '2024001'; })) {
+        users.push({
+          studentId: '2024001',
+          password: '123456',
+          realName: '张同学',
+          school: '示例大学'
+        });
+        saveStoredUsers(users);
+      }
+    })();
+
     // ---- 登录/退出逻辑 ---- //
 
-    function doLogin(name) {
+    function doLogin(userInfo) {
       document.getElementById('landingPage').style.display = 'none';
       document.getElementById('appShell').style.display = '';
-      S.currentUser = { name: name, role: 'workspace' };
+      S.currentUser = {
+        studentId: userInfo.studentId,
+        realName: userInfo.realName,
+        school: userInfo.school || '',
+        role: 'workspace'
+      };
       document.getElementById('loggedOut').style.display = 'none';
       document.getElementById('loggedIn').style.display = 'flex';
       document.getElementById('userBadge').innerHTML =
-        '<span class="role-dot workspace"></span>@' + name + ' · 智学空间';
+        '<span class="role-dot workspace"></span>' + userInfo.realName + ' · ' + userInfo.studentId;
       ZhixueApp.setRole('workspace');
       document.getElementById('roleLabel').textContent = S.roleLabels.workspace || ZhixueApp.getRoleLabel();
+      var greeting = document.getElementById('profileGreeting');
+      if (greeting) {
+        greeting.textContent = '你好，' + userInfo.realName + '，今天想学点什么呢？';
+      }
     }
 
     function doLogout() {
@@ -941,20 +1137,233 @@
       ZhixueApp.setRole('workspace');
       document.getElementById('roleLabel').textContent = S.roleLabels.workspace;
       S.updatePreviewNotice();
+      var greeting = document.getElementById('profileGreeting');
+      if (greeting) {
+        greeting.textContent = '你好，我是智学工坊，今天你想学点什么呢？';
+      }
+    }
+
+    /** 重置弹窗到干净状态 */
+    function resetEntryModal() {
+      // 隐藏忘记密码区域，恢复密码字段和标题
+      document.getElementById('forgotPasswordArea').classList.remove('show');
+      document.getElementById('fieldPassword').style.display = '';
+      document.getElementById('entryActions').style.display = '';
+      document.getElementById('formLinks').style.display = '';
+      // 清空所有输入
+      ['entryStudentId', 'entryPassword', 'entrySchool', 'entryRealName', 'entryConfirmPassword',
+       'forgotRealName', 'forgotNewPassword', 'forgotConfirmPassword'].forEach(function (id) {
+        document.getElementById(id).value = '';
+      });
+      // 隐藏所有错误
+      document.querySelectorAll('#entryModal .field-error').forEach(function (el) { el.classList.remove('show'); });
+      // 重置忘记密码输入
+      document.getElementById('forgotRealName').value = '';
+      document.getElementById('forgotNewPassword').value = '';
+      document.getElementById('forgotConfirmPassword').value = '';
     }
 
     function openEntryModal(mode) {
       entryMode = mode || 'login';
       var isRegister = entryMode === 'register';
+      resetEntryModal();
+
       document.getElementById('entryTitle').textContent = isRegister ? '注册' : '登录';
       document.getElementById('entrySub').textContent = isRegister
-        ? '创建演示账号，进入完整功能空间'
-        : '输入昵称，进入智学工坊空间';
-      document.getElementById('confirmEntry').textContent = isRegister ? '注册并进入' : '登录并进入';
-      document.getElementById('entryName').value = isRegister ? '' : '张三';
-      document.getElementById('entryName').placeholder = isRegister ? '输入你的昵称，例如：李同学' : '输入你的昵称';
-      document.getElementById('entryNameError').classList.remove('show');
+        ? '创建账号，进入智学工坊学习空间'
+        : '请输入学号和密码进入智学工坊';
+      document.getElementById('confirmEntry').textContent = isRegister ? '注册并进入' : '登录';
+
+      // 注册字段显示/隐藏
+      document.getElementById('fieldSchool').style.display = isRegister ? '' : 'none';
+      document.getElementById('fieldRealName').style.display = isRegister ? '' : 'none';
+      document.getElementById('fieldConfirmPassword').style.display = isRegister ? '' : 'none';
+
+      // 忘记密码链接（仅登录模式）
+      document.getElementById('linkForgotPassword').style.display = isRegister ? 'none' : '';
+
+      // 切换链接文字
+      document.getElementById('toggleMode').textContent = isRegister
+        ? '已有账号？去登录'
+        : '还没有账号？去注册';
+
       S.showModal('entryModal');
+    }
+
+    /** 验证并提交登录 */
+    function handleLogin() {
+      var studentId = document.getElementById('entryStudentId').value.trim();
+      var password = document.getElementById('entryPassword').value;
+      var valid = true;
+
+      if (!studentId) {
+        document.getElementById('entryStudentIdError').classList.add('show');
+        valid = false;
+      } else {
+        document.getElementById('entryStudentIdError').classList.remove('show');
+      }
+
+      if (password.length < 6) {
+        document.getElementById('entryPasswordError').classList.add('show');
+        valid = false;
+      } else {
+        document.getElementById('entryPasswordError').classList.remove('show');
+      }
+
+      if (!valid) return;
+
+      var user = findUserByStudentId(studentId);
+      if (!user) {
+        document.getElementById('entryStudentIdError').textContent = '学号未注册';
+        document.getElementById('entryStudentIdError').classList.add('show');
+        return;
+      }
+
+      if (user.password !== password) {
+        document.getElementById('entryPasswordError').textContent = '密码错误';
+        document.getElementById('entryPasswordError').classList.add('show');
+        return;
+      }
+
+      // 登录成功
+      S.hideModal('entryModal');
+      doLogin(user);
+    }
+
+    /** 验证并提交注册 */
+    function handleRegister() {
+      var school = document.getElementById('entrySchool').value.trim();
+      var studentId = document.getElementById('entryStudentId').value.trim();
+      var realName = document.getElementById('entryRealName').value.trim();
+      var password = document.getElementById('entryPassword').value;
+      var confirmPassword = document.getElementById('entryConfirmPassword').value;
+      var valid = true;
+
+      if (!school) {
+        document.getElementById('entrySchoolError').classList.add('show');
+        valid = false;
+      } else {
+        document.getElementById('entrySchoolError').classList.remove('show');
+      }
+
+      if (!studentId) {
+        document.getElementById('entryStudentIdError').textContent = '请输入学号';
+        document.getElementById('entryStudentIdError').classList.add('show');
+        valid = false;
+      } else {
+        document.getElementById('entryStudentIdError').textContent = '请输入学号';
+        document.getElementById('entryStudentIdError').classList.remove('show');
+      }
+
+      if (!realName) {
+        document.getElementById('entryRealNameError').classList.add('show');
+        valid = false;
+      } else {
+        document.getElementById('entryRealNameError').classList.remove('show');
+      }
+
+      if (password.length < 6) {
+        document.getElementById('entryPasswordError').classList.add('show');
+        valid = false;
+      } else {
+        document.getElementById('entryPasswordError').classList.remove('show');
+      }
+
+      if (password !== confirmPassword) {
+        document.getElementById('entryConfirmPasswordError').classList.add('show');
+        valid = false;
+      } else {
+        document.getElementById('entryConfirmPasswordError').classList.remove('show');
+      }
+
+      if (!valid) return;
+
+      // 检查学号是否已注册
+      if (findUserByStudentId(studentId)) {
+        document.getElementById('entryStudentIdError').textContent = '该学号已注册';
+        document.getElementById('entryStudentIdError').classList.add('show');
+        return;
+      }
+
+      // 保存新用户
+      var newUser = {
+        studentId: studentId,
+        password: password,
+        realName: realName,
+        school: school
+      };
+      var users = getStoredUsers();
+      users.push(newUser);
+      saveStoredUsers(users);
+
+      // 注册成功，直接登录
+      S.hideModal('entryModal');
+      doLogin(newUser);
+    }
+
+    /** 验证并重置密码 */
+    function handleResetPassword() {
+      var studentId = document.getElementById('entryStudentId').value.trim();
+      var realName = document.getElementById('forgotRealName').value.trim();
+      var newPassword = document.getElementById('forgotNewPassword').value;
+      var confirmPassword = document.getElementById('forgotConfirmPassword').value;
+      var valid = true;
+
+      if (!studentId) {
+        document.getElementById('entryStudentIdError').textContent = '请先输入学号';
+        document.getElementById('entryStudentIdError').classList.add('show');
+        valid = false;
+      } else {
+        document.getElementById('entryStudentIdError').classList.remove('show');
+      }
+
+      if (!realName) {
+        document.getElementById('forgotRealNameError').classList.add('show');
+        valid = false;
+      } else {
+        document.getElementById('forgotRealNameError').classList.remove('show');
+      }
+
+      if (newPassword.length < 6) {
+        document.getElementById('forgotNewPasswordError').classList.add('show');
+        valid = false;
+      } else {
+        document.getElementById('forgotNewPasswordError').classList.remove('show');
+      }
+
+      if (newPassword !== confirmPassword) {
+        document.getElementById('forgotConfirmPasswordError').classList.add('show');
+        valid = false;
+      } else {
+        document.getElementById('forgotConfirmPasswordError').classList.remove('show');
+      }
+
+      if (!valid) return;
+
+      // 验证学号和姓名匹配
+      var user = findUserByStudentId(studentId);
+      if (!user) {
+        document.getElementById('entryStudentIdError').textContent = '学号未注册';
+        document.getElementById('entryStudentIdError').classList.add('show');
+        return;
+      }
+      if (user.realName !== realName) {
+        document.getElementById('forgotRealNameError').textContent = '姓名与注册时不一致';
+        document.getElementById('forgotRealNameError').classList.add('show');
+        return;
+      }
+
+      // 更新密码
+      var users = getStoredUsers();
+      var target = users.find(function (u) { return u.studentId === studentId; });
+      if (target) {
+        target.password = newPassword;
+        saveStoredUsers(users);
+      }
+
+      // 重置成功，自动登录
+      S.hideModal('entryModal');
+      doLogin(user);
     }
 
     // ---- 路由初始化 ---- //
@@ -984,36 +1393,194 @@
     document.getElementById('cancelEntry').addEventListener('click', function () { S.hideModal('entryModal'); });
     document.getElementById('entryModal').addEventListener('click', function (e) { if (e.target === this) S.hideModal('entryModal'); });
 
+    // 登录/注册提交
     document.getElementById('confirmEntry').addEventListener('click', function () {
-      var name = document.getElementById('entryName').value.trim();
-      if (!name) { document.getElementById('entryNameError').classList.add('show'); return; }
-      document.getElementById('entryNameError').classList.remove('show');
-      S.hideModal('entryModal');
-      doLogin(name);
+      if (entryMode === 'register') {
+        handleRegister();
+      } else {
+        handleLogin();
+      }
     });
+
+    // 回车键提交
+    document.getElementById('entryModal').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (document.getElementById('forgotPasswordArea').classList.contains('show')) {
+          handleResetPassword();
+        } else if (entryMode === 'register') {
+          handleRegister();
+        } else {
+          handleLogin();
+        }
+      }
+    });
+
+    // 切换登录/注册模式
+    document.getElementById('toggleMode').addEventListener('click', function (e) {
+      e.preventDefault();
+      openEntryModal(entryMode === 'login' ? 'register' : 'login');
+    });
+
+    // 忘记密码
+    document.getElementById('linkForgotPassword').addEventListener('click', function (e) {
+      e.preventDefault();
+      document.getElementById('entryTitle').textContent = '忘记密码';
+      document.getElementById('entrySub').textContent = '验证身份后即可重置密码';
+      document.getElementById('fieldPassword').style.display = 'none';
+      document.getElementById('forgotPasswordArea').classList.add('show');
+      document.getElementById('entryActions').style.display = 'none';
+      document.getElementById('formLinks').style.display = 'none';
+      document.getElementById('forgotRealName').value = '';
+      document.getElementById('forgotNewPassword').value = '';
+      document.getElementById('forgotConfirmPassword').value = '';
+    });
+
+    // 取消忘记密码
+    document.getElementById('cancelForgotPassword').addEventListener('click', function () {
+      document.getElementById('entryTitle').textContent = '登录';
+      document.getElementById('entrySub').textContent = '请输入学号和密码进入智学工坊';
+      document.getElementById('fieldPassword').style.display = '';
+      document.getElementById('forgotPasswordArea').classList.remove('show');
+      document.getElementById('entryActions').style.display = '';
+      document.getElementById('formLinks').style.display = '';
+    });
+
+    // 重置密码提交
+    document.getElementById('confirmResetPassword').addEventListener('click', handleResetPassword);
 
     document.getElementById('btnLogout').addEventListener('click', doLogout);
 
-    // 诊断按钮
-    document.getElementById('diagnoseBtn').addEventListener('click', function () {
-      var drawer = document.getElementById('profileDrawer');
-      drawer.classList.add('show');
-      ZhixuePages.renderProfileGrid('profileGrid');
-      drawer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
+    // 诊断按钮（学习画像页）
+    var profileDiagnoseBtn = document.getElementById('profileDiagnoseBtn');
+    if (profileDiagnoseBtn) {
+      profileDiagnoseBtn.addEventListener('click', function () {
+        var drawer = document.getElementById('profileDrawerSection');
+        drawer.classList.add('show');
+        ZhixuePages.renderProfileGrid('profilePageGrid');
+        ZhixuePages.renderMasteryChart('profileMasteryChart');
+        drawer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    }
 
     // 跳转按钮
-    document.getElementById('gotoResourcesBtn').addEventListener('click', function () { ZhixueApp.navigate('resources'); });
-    document.getElementById('gotoResourcesFromProfile').addEventListener('click', function () { ZhixueApp.navigate('resources'); });
-    document.getElementById('gotoQuizFromProfile').addEventListener('click', function () { ZhixueApp.navigate('quiz'); });
+    var gotoResourcesFromProfileDrawer = document.getElementById('gotoResourcesFromProfileDrawer');
+    if (gotoResourcesFromProfileDrawer) {
+      gotoResourcesFromProfileDrawer.addEventListener('click', function () { ZhixueApp.navigate('resources'); });
+    }
+    var gotoResourcesFromProfile = document.getElementById('gotoResourcesFromProfile');
+    if (gotoResourcesFromProfile) {
+      gotoResourcesFromProfile.addEventListener('click', function () { ZhixueApp.navigate('resources'); });
+    }
+    var gotoQuizFromProfile = document.getElementById('gotoQuizFromProfile');
+    if (gotoQuizFromProfile) {
+      gotoQuizFromProfile.addEventListener('click', function () { ZhixueApp.navigate('quiz'); });
+    }
 
-    // 快速提示词
-    document.querySelectorAll('.quick-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () { document.getElementById('studentNeed').value = this.textContent; });
+    // 画像诊断：生成学习画像
+    var diagnosisGenerateBtn = document.getElementById('diagnosisGenerateBtn');
+    var diagnosisInput = document.getElementById('diagnosisInput');
+    if (diagnosisGenerateBtn) {
+      diagnosisGenerateBtn.addEventListener('click', function () {
+        ZhixuePages.generateProfile();
+      });
+    }
+    // Ctrl+Enter 快捷生成
+    if (diagnosisInput) {
+      diagnosisInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+          e.preventDefault();
+          ZhixuePages.generateProfile();
+        }
+      });
+    }
+
+    // 清空输入
+    var diagClearBtn = document.getElementById('diagClearBtn');
+    if (diagClearBtn) {
+      diagClearBtn.addEventListener('click', function () {
+        var input = document.getElementById('diagnosisInput');
+        if (input) input.value = '';
+        var result = document.getElementById('diagnosisResult');
+        if (result) result.style.display = 'none';
+      });
+    }
+
+    // 诊断完成 → 跳转学习画像
+    var gotoProfileFromDiagnosis = document.getElementById('gotoProfileFromDiagnosis');
+    if (gotoProfileFromDiagnosis) {
+      gotoProfileFromDiagnosis.addEventListener('click', function () {
+        ZhixueApp.navigate('profile');
+        ZhixuePages.renderProfileGrid('profilePageGrid');
+        ZhixuePages.renderMasteryChart('profileMasteryChart');
+        ZhixuePages.renderProfileUpdateLog();
+      });
+    }
+
+    // 画像页 → 返回诊断
+    var backToDiagnosis = document.getElementById('backToDiagnosis');
+    if (backToDiagnosis) {
+      backToDiagnosis.addEventListener('click', function () {
+        ZhixueApp.navigate('diagnosis');
+        ZhixuePages.renderDiagnosis();
+      });
+    }
+
+    // 演示页登录/注册后自动进入学生空间
+    var demoEntryUser = localStorage.getItem('zhixue_demo_entry_user');
+    if (demoEntryUser) {
+      try {
+        var parsedUser = JSON.parse(demoEntryUser);
+        localStorage.removeItem('zhixue_demo_entry_user');
+        doLogin({
+          studentId: parsedUser.studentId || '2024001',
+          realName: parsedUser.realName || parsedUser.name || '同学',
+          school: parsedUser.school || ''
+        });
+      } catch (err) {
+        localStorage.removeItem('zhixue_demo_entry_user');
+      }
+    }
+
+    // ---- 左侧导航栏折叠切换 ---- //
+
+    var railToggle = document.getElementById('railToggle');
+    var rail = document.getElementById('mainNav');
+    var appShell = document.getElementById('appShell');
+
+    // 从 localStorage 恢复展开/折叠状态（默认展开）
+    var stored = localStorage.getItem('zhixue_rail_expanded');
+    var railExpanded = stored === null ? true : stored === 'true';
+    if (railExpanded) {
+      rail.classList.add('expanded');
+      appShell.classList.add('rail-expanded');
+    }
+    updateToggleIcon();
+
+    railToggle.addEventListener('click', function () {
+      railExpanded = !railExpanded;
+      rail.classList.toggle('expanded', railExpanded);
+      appShell.classList.toggle('rail-expanded', railExpanded);
+      localStorage.setItem('zhixue_rail_expanded', String(railExpanded));
+      updateToggleIcon();
     });
 
+    function updateToggleIcon() {
+      var icon = railToggle.querySelector('.rail-icon');
+      var label = railToggle.querySelector('.rail-label');
+      if (railExpanded) {
+        icon.innerHTML = '&#xAB;';  // « 折叠
+        label.textContent = '折叠菜单';
+        railToggle.title = '折叠菜单';
+      } else {
+        icon.innerHTML = '&#x2630;';  // ☰ 展开
+        label.textContent = '展开菜单';
+        railToggle.title = '展开菜单';
+      }
+    }
+
     // 初始渲染
-    ZhixuePages.renderProfileGrid('profileGrid');
+    ZhixuePages.renderProfileGrid('profilePageGrid');
     S.updatePreviewNotice();
   })();
   </script>

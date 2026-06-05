@@ -124,6 +124,12 @@ p {
   display: grid;
   grid-template-columns: 48px minmax(0, 1fr);
   min-height: 100vh;
+  transition: grid-template-columns 0.25s ease;
+}
+
+/* 侧边栏展开时网格列宽跟随变化 */
+.app.rail-expanded {
+  grid-template-columns: 180px minmax(0, 1fr);
 }
 
 /* ---- 5. Left Rail Navigation ---- */
@@ -139,6 +145,16 @@ p {
   align-items: center;
   gap: 10px;
   z-index: 10;
+  width: 48px;
+  transition: width 0.25s ease;
+  overflow: hidden;
+}
+
+/* 展开态 */
+.rail.expanded {
+  width: 180px;
+  align-items: stretch;
+  padding: 12px 10px;
 }
 
 .rail-logo,
@@ -149,6 +165,18 @@ p {
   place-items: center;
   border-radius: 10px;
   transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+/* 展开态下按钮变宽 */
+.rail.expanded .rail-logo,
+.rail.expanded .rail-btn {
+  width: 100%;
+  justify-content: flex-start;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .rail-logo {
@@ -174,6 +202,32 @@ p {
   box-shadow: 0 8px 20px rgba(43, 35, 27, 0.08);
 }
 
+/* 图标 */
+.rail-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  font-size: 15px;
+  line-height: 1;
+}
+
+/* 文字标签 — 折叠时隐藏 */
+.rail-label {
+  display: none;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rail.expanded .rail-label {
+  display: inline;
+}
+
+/* 折叠时 tooltip 依旧显示，展开时隐藏 tooltip */
 .rail-btn[title]::after {
   content: attr(title);
   position: absolute;
@@ -196,6 +250,46 @@ p {
   opacity: 1;
 }
 
+/* 展开时隐藏 tooltip（因为已经有文字标签了） */
+.rail.expanded .rail-btn[title]::after {
+  display: none;
+}
+
+/* 折叠切换按钮 */
+.rail-toggle {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  border: 0;
+  background: transparent;
+  color: #776f65;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.rail-toggle:hover {
+  background: #ffffff;
+  color: var(--ink);
+  box-shadow: 0 8px 20px rgba(43, 35, 27, 0.08);
+}
+
+.rail.expanded .rail-toggle {
+  width: 100%;
+  justify-content: flex-start;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rail.expanded .rail-toggle .rail-label {
+  display: inline;
+}
+
 .rail-divider {
   width: 20px;
   height: 1px;
@@ -203,10 +297,19 @@ p {
   margin: 4px 0;
 }
 
+.rail.expanded .rail-divider {
+  width: calc(100% - 20px);
+  align-self: center;
+}
+
 .rail-bottom {
   margin-top: auto;
   display: grid;
   gap: 10px;
+}
+
+.rail.expanded .rail-bottom {
+  width: 100%;
 }
 
 /* ---- 6. Top Bar ---- */
@@ -818,6 +921,64 @@ p {
   50% { opacity: 0.5; }
 }
 
+/* ---- 23b. Agent Timeline ---- */
+.agent-timeline {
+  margin-top: 32px;
+}
+
+.tl-track {
+  position: relative;
+  padding-left: 12px;
+  border-left: 2px solid var(--line);
+  margin-left: 8px;
+}
+
+.tl-node {
+  position: relative;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 10px 0 10px 16px;
+}
+
+.tl-node.tl-sub {
+  padding: 6px 0 6px 28px;
+}
+
+.tl-dot {
+  position: absolute;
+  left: -6px;
+  top: 14px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--line);
+  border: 2px solid var(--bg-1, #fff);
+}
+
+.tl-dot.sm {
+  width: 7px;
+  height: 7px;
+  left: -5px;
+  top: 12px;
+}
+
+.tl-dot.done {
+  background: var(--green);
+}
+
+.tl-dot.running {
+  background: var(--amber);
+}
+
+.tl-dot.error {
+  background: var(--error);
+}
+
+.tl-dot.ready {
+  background: var(--line);
+}
+
 /* ---- 24. Teacher Dashboard ---- */
 .teacher-cards {
   display: grid;
@@ -1283,7 +1444,261 @@ p {
 .text-left { text-align: left; }
 .text-right { text-align: right; }
 
-/* ---- 32. Responsive ---- */
+/* ---- 32. Diagnosis Page ---- */
+.diagnosis-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 40px 20px 40px;
+}
+
+/* Logo 浮动文字 */
+.diag-logo-area {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.diag-logo-text {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 900;
+  color: #243247;
+  letter-spacing: 0.02em;
+}
+
+.diag-logo-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4A90E2;
+  vertical-align: middle;
+  margin: 0 2px;
+}
+
+.diag-logo-sub {
+  font-size: 12px;
+  color: #7A8BA0;
+  margin-top: 6px;
+  letter-spacing: 0.04em;
+}
+
+/* 对话框 */
+.diagnosis-panel {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+/* 模型选择器（在 topbar 中） */
+.diag-model-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  background: #FAFBFC;
+  font-size: 12px;
+  color: #7A8BA0;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.diag-model-select:hover {
+  border-color: #4A90E2;
+}
+
+.diag-model-select .model-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #30D158;
+}
+
+.diag-model-select .model-name {
+  font-weight: 600;
+  color: #243247;
+}
+
+.diag-model-select .model-chevron {
+  font-size: 10px;
+  color: #8E8E93;
+}
+
+/* 输入区域 */
+.diag-input-area {
+  padding: 14px 20px;
+}
+
+.diag-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  font-size: 16px;
+  line-height: 1.7;
+  resize: none;
+  outline: none;
+  font-family: inherit;
+  color: #243247;
+  background: transparent;
+}
+
+.diag-textarea::placeholder {
+  color: #C4C8CF;
+  font-size: 16px;
+}
+
+/* 底部栏：功能按钮左 + 发送右 */
+.diag-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px 14px;
+}
+
+.diag-func-row {
+  display: flex;
+  gap: 2px;
+}
+
+.diag-func-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #8E8E93;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+
+.diag-func-btn::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 25%;
+  height: 50%;
+  width: 1px;
+  background: #E2E2E6;
+}
+
+.diag-func-btn:last-child::after {
+  display: none;
+}
+
+.diag-func-btn .func-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.diag-func-btn:hover {
+  background: #F4F6F9;
+  color: #243247;
+}
+
+.diag-func-btn.active {
+  background: #EEF2F8;
+  color: #4A90E2;
+}
+
+/* 发送按钮 */
+.diag-send-btn {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  border: 0;
+  background: #4A90E2;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.diag-send-btn:hover {
+  background: #3A7ED0;
+  box-shadow: 0 4px 14px rgba(74,144,226,0.28);
+}
+
+/* 右侧组：模型选择 + 发送按钮 */
+.diag-right-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 结果区 */
+.diagnosis-result {
+  width: 100%;
+  margin-top: 24px;
+  background: #fff;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  animation: slide-up 0.4s ease;
+}
+
+.diag-result-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.diag-result-header h3 {
+  margin: 4px 0 0;
+  font-size: 16px;
+  color: #243247;
+}
+
+.diag-draft-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+}
+
+.diag-draft-card {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #FAFBFC;
+  border: 1px solid #EDF1F7;
+}
+
+.diag-draft-card .card-icon { font-size: 16px; margin-bottom: 2px; }
+.diag-draft-card .card-label { font-size: 11px; font-weight: 700; color: #7A8BA0; margin-bottom: 3px; }
+.diag-draft-card .card-value { font-size: 13px; color: #243247; line-height: 1.5; }
+
+.diag-toast {
+  margin-top: 10px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  text-align: center;
+  animation: slide-up 0.3s ease;
+}
+.diag-toast.warn { background: #FFF8E1; color: #B45309; border: 1px solid #FDE68A; }
+.diag-toast.info  { background: #F4F8FD; color: #4A90E2; border: 1px solid #DCE7F3; }
+
+/* ---- 33. Responsive ---- */
 @media (max-width: 980px) {
   .top-actions {
     display: none;
